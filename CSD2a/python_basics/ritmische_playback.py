@@ -3,7 +3,7 @@ import simpleaudio as sa
 import time
 
 # read wave file and store as wave object
-wave_read = wave.open("/Users/vincent/documents/CSD2/python_basics/bongo.wav", 'rb')
+wave_read = wave.open("/Users/vincent/documents/CSD2/CSD2a/python_basics/bongo.wav", 'rb')
 wave_obj = sa.WaveObject.from_wave_read(wave_read)
 
 gotPlaybackTimes = False
