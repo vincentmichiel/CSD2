@@ -1,1 +1,1 @@
-readme for csd
+Repository for CSD2 assignments and projectss
