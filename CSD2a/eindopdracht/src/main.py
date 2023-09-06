@@ -1,116 +1,77 @@
 import wave
 import simpleaudio as sa
 import time
+import random
 
 beatDivisions = [
     {
         "division": "5/4",
         "16ths": [
             # 1
-            {
-                "low chance": 90,
-                "mid chance": 40,
-                "high chance": 60
-            },
-            {
-                "low chance": 10,
-                "mid chance": 40,
-                "high chance": 90
-            },
-            {
-                "low chance": 10,
-                "mid chance": 65,
-                "high chance": 50
-            },
-            {
-                "low chance": 30,
-                "mid chance": 25,
-                "high chance": 90
-            },
+            [
+               [90, 40, 60] # low mid high chance
+            ],
+            [
+                [10, 40, 90]
+            ],
+            [
+                [10, 65, 50]
+            ],
+            [
+                [30, 25, 90]
+            ],
             # 2
-            {
-                "low chance": 30,
-                "mid chance": 40,
-                "high chance": 60
-            },
-            {
-                "low chance": 10,
-                "mid chance": 40,
-                "high chance": 90
-            },
-            {
-                "low chance": 10,
-                "mid chance": 65,
-                "high chance": 50
-            },
-            {
-                "low chance": 15,
-                "mid chance": 25,
-                "high chance": 90
-            },
+            [
+                [30, 40, 60] # low mid high chance
+            ],
+           [
+                [10, 40, 90]
+            ],
+            [
+                [10, 65, 50]
+            ],
+            [
+                [15, 25, 90]
+            ],
             # 3
-            {
-                "low chance": 50,
-                "mid chance": 40,
-                "high chance": 60
-            },
-            {
-                "low chance": 10,
-                "mid chance": 40,
-                "high chance": 90
-            },
-            {
-                "low chance": 10,
-                "mid chance": 65,
-                "high chance": 50
-            },
-            {
-                "low chance": 30,
-                "mid chance": 25,
-                "high chance": 90
-            },
+            [
+                [50, 40, 60] # low mid high chance
+            ],
+            [
+                [10, 40, 90]
+            ],
+            [
+                [10, 65, 50]
+            ],
+            [
+                [30, 25, 90]
+            ],
             # 4
-            {
-                "low chance": 75,
-                "mid chance": 40,
-                "high chance": 60
-            },
-            {
-                "low chance": 10,
-                "mid chance": 40,
-                "high chance": 90
-            },
-            {
-                "low chance": 10,
-                "mid chance": 65,
-                "high chance": 50
-            },
-            {
-                "low chance": 30,
-                "mid chance": 25,
-                "high chance": 60
-            },
+            [
+                [75, 40, 60] # low mid high chance
+            ],
+            [
+                [10, 40, 90]
+            ],
+            [
+                [10, 65, 50]
+            ],
+            [
+                [30, 25, 60]
+            ],
             # 5
-            {
-                "low chance": 30,
-                "mid chance": 40,
-                "high chance": 60
-            },
-            {
-                "low chance": 10,
-                "mid chance": 40,
-                "high chance": 90
-            },
-            {
-                "low chance": 10,
-                "mid chance": 65,
-                "high chance": 50
-            },
-            {
-                "low chance": 30,
-                "mid chance": 25,
-                "high chance": 30
-            }
+            [
+                [30, 40, 60] # low mid high chance
+            ],
+            [
+                [10, 40, 90]
+            ],
+            [
+                [10, 70, 50]
+            ],
+            [
+                [30, 25, 60]
+            ],
         ]
     },
     {
@@ -152,11 +113,11 @@ while not bpmInput:
 def sampleSelect(sample):
     match sample:
         case "low":
-            print("samples: 1. kick 2. djembe 3. bass")
+            print("samples: 1. kick 2. orchestral kick 3. bass")
         case "mid":
-            print("samples: 1. snare 2. bongo 3. cello")
+            print("samples: 1. snare 2. orchestral snare 3. cello")
         case "high":
-            print("samples: 1. hi-hat 2. glass 3. violin")
+            print("samples: 1. hi-hat 2. orchestral hit 3. violin")
 
     sampleInput = False
     while not sampleInput:
@@ -177,3 +138,60 @@ def sampleSelect(sample):
 low_sample = sampleSelect("low")
 mid_sample = sampleSelect("mid")
 high_sample = sampleSelect("high")
+
+selectedSamples = [low_sample, mid_sample, high_sample]
+
+# calculate 16th time in seconds
+beatTime = 60/(bpm * 4)
+
+# generate events for low mid and high samples
+
+events = []
+
+sampleIterator = 0
+while sampleIterator < 3: # loop through low mid and high samples
+    _16th = 0
+    while _16th < len(beatDivisions[division]["16ths"]): # < total amount of 16ths
+        # chance to generate event                                            chance from beatdivisions array
+        if random.randint(1, 100) < beatDivisions[division]["16ths"][_16th][0][sampleIterator]:
+            # generate event on 16th timestamp
+            eventStore = {
+                "timestamp": _16th * beatTime,
+                "sample": sampleIterator + 1
+            }
+            events.append(eventStore)
+        _16th += 1
+    sampleIterator += 1
+
+# sort events by timestamps
+events = sorted(events, key=lambda timestamp: timestamp['timestamp'])
+
+# load audio samples
+sampleNames = [
+    ["kick.wav", "orchestral_kick.wav", "lowsynth.wav"],
+    ["snare.wav", "orchestral_snare.wav", "midsynth.wav"],
+    ["hat.wav", "orchestral_hit.wav", "highsynth.wav"]
+]
+
+samples = []
+
+assignSample = 0
+while assignSample < 3:
+    samples.append(sa.WaveObject.from_wave_read(wave.open("/Users/vincent/documents/CSD2/CSD2a/eindopdracht/src/assets/" + sampleNames[assignSample][selectedSamples[assignSample] - 1], 'rb')))
+    assignSample += 1
+
+# play events
+def playbackHandler(event):
+    # handles playback events
+    samples[event["sample"] - 1].play()
+
+# loop through events
+iterator = 0
+while iterator < len(events):
+    # play sample
+    playbackHandler(events[iterator])
+    if iterator == len(events) - 1:
+        break
+    # wait for next timestamp
+    time.sleep(float(events[iterator + 1]["timestamp"]) - float(events[iterator]["timestamp"]))
+    iterator += 1

@@ -14,7 +14,7 @@ beat generator:
     - generate a note sequence
         - timing according to beat division with semi randomness
         - logical hits for low mid and high samples (e.g. low on downbeat)
-    - generate events from note sequence
+    - generate events from note sequence and timestamps
     - play events according to bpm
 
 midi generator:
@@ -39,8 +39,8 @@ step by step:
         ]
     4. beat generator, assign samples to each beat according to chance, store in events list:
         [
-            16th timestamp: 0 - 4 * beats,
-            sample: low, mid , high
+            timestamp
+            sample
         ]
     5. sort events
     7. create playback handler
