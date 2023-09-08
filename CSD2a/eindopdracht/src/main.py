@@ -10,68 +10,68 @@ beatDivisions = [
         "16ths": [
             # 1
             [
-                [90, 10, 60] # low mid high chance
+                [90, 5, 60] # low mid high chance
             ],
             [
-                [10, 10, 90]
+                [5, 5, 90]
             ],
             [
-                [10, 10, 50]
+                [5, 3, 60]
             ],
             [
-                [20, 25, 90]
+                [5, 2, 80]
             ],
             # 2
             [
-                [20, 80, 60] # low mid high chance
+                [70, 5, 60] # low mid high chance
             ],
             [
-                [10, 20, 90]
+                [2, 10, 90]
             ],
             [
-                [10, 10, 50]
+                [4, 80, 50]
             ],
             [
-                [15, 25, 90]
+                [5, 4, 90]
             ],
             # 3
             [
-                [20, 50, 60] # low mid high chance
+                [75, 10, 30] # low mid high chance
             ],
             [
-                [10, 5, 90]
+                [2, 5, 90]
             ],
             [
-                [75, 15, 50]
+                [5, 10, 50]
             ],
             [
-                [30, 10, 90]
+                [1, 1, 90]
             ],
             # 4
             [
-                [90, 10, 60] # low mid high chance
+                [90, 10, 30] # low mid high chance
             ],
             [
-                [10, 12, 90]
+                [5, 12, 90]
             ],
             [
-                [10, 65, 50]
+                [5, 65, 50]
             ],
             [
-                [10, 2, 80]
+                [5, 2, 80]
             ],
             # 5
             [
-                [15, 80, 60] # low mid high chance
+                [85, 10, 60] # low mid high chance
             ],
             [
-                [10, 10, 90]
+                [5, 10, 90]
             ],
             [
-                [10, 70, 50]
+                [20, 70, 30]
             ],
             [
-                [30, 25, 60]
+                [3, 25, 60]
             ],
         ]
     },
@@ -145,31 +145,6 @@ selectedSamples = [low_sample, mid_sample, high_sample]
 # calculate 16th time in seconds
 beatTime = (60/(bpm)) / 5
 
-# generate events for low mid and high samples
-
-events = []
-
-sampleIterator = 0
-while sampleIterator < 3: # loop through low mid and high samples
-    _16th = 0
-    while _16th < len(beatDivisions[division]["16ths"]): # < total amount of 16ths
-        # chance to generate event                                            chance from beatdivisions array
-        if random.randint(1, 100) < beatDivisions[division]["16ths"][_16th][0][sampleIterator]:
-            # generate event on 16th timestamp
-            eventStore = {
-                "timestamp": _16th * beatTime,
-                "sample": sampleIterator + 1,
-                "midiPitch": 60 + sampleIterator,
-                "midiTime": _16th/4,
-                "midiDuration": 0.25
-            }
-            events.append(eventStore)
-        _16th += 1
-    sampleIterator += 1
-
-# sort events by timestamps
-events = sorted(events, key=lambda timestamp: timestamp['timestamp'])
-
 # load audio samples
 sampleNames = [
     ["kick.wav", "orchestral_kick.wav", "lowsynth.wav"],
@@ -189,18 +164,7 @@ def playbackHandler(event):
     # handles playback events
     samples[event["sample"] - 1].play()
 
-# loop through events
-iterator = 0
-while iterator < len(events):
-    # play sample
-    playbackHandler(events[iterator])
-    if iterator == len(events) - 1:
-        break
-    # wait for next timestamp
-    time.sleep(float(events[iterator + 1]["timestamp"]) - float(events[iterator]["timestamp"]))
-    iterator += 1
-
-def createMidiFile():
+def createMidiFile(importEvents):
     # general midi file info
     mf = MIDIFile(1, file_format=1)     # only 1 track
     track = 0
@@ -212,12 +176,71 @@ def createMidiFile():
     channel = 0
     volume = 100
 
-    for event in events:
+    for event in importEvents:
         mf.addNote(track, channel, event["midiPitch"], event["midiTime"], event["midiDuration"], volume)
     
     # write file to disk
     with open("/Users/vincent/documents/CSD2/CSD2a/eindopdracht/src/output.mid", 'wb') as outf:
         mf.writeFile(outf)
 
+events = []
+def generateSequence():
+    # generate events for low mid and high samples
 
-createMidiFile()
+    events = []
+
+    sampleIterator = 0
+    while sampleIterator < 3: # loop through low mid and high samples
+        _16th = 0
+        while _16th < len(beatDivisions[division]["16ths"]): # < total amount of 16ths
+            # chance to generate event                                            chance from beatdivisions array
+            if random.randint(1, 100) < beatDivisions[division]["16ths"][_16th][0][sampleIterator]:
+                # generate event on 16th timestamp
+                eventStore = {
+                    "timestamp": _16th * beatTime,
+                    "sample": sampleIterator + 1,
+                    "midiPitch": 60 + sampleIterator,
+                    "midiTime": _16th/4,
+                    "midiDuration": 0.25
+                }
+                events.append(eventStore)
+            _16th += 1
+        sampleIterator += 1
+    
+    # sort events by timestamps
+    events = sorted(events, key=lambda timestamp: timestamp['timestamp'])
+
+    # loop through events
+    iterator = 0
+    while iterator < len(events):
+        # play sample
+        playbackHandler(events[iterator])
+        if iterator == len(events) - 1:
+            break
+        # wait for next timestamp
+        time.sleep(float(events[iterator + 1]["timestamp"]) - float(events[iterator]["timestamp"]))
+        iterator += 1
+
+    # ask user to store midi file
+    storeMidi = 0
+    gotMidiStore = False
+    while not gotMidiStore:
+        try:
+            storeMidi = int(input("Save to MIDI?. 1. Yes 2. No: ")) - 1
+            if division < 0 or division > 1:
+                # input out of range
+                print("Choose either 1 or 2!")
+            else:
+                # got valid input
+                gotMidiStore = True
+        except:
+            # not an integer
+            print("Choose either 1 or 2!")
+
+    if storeMidi == 1:
+        # user doesnt want to store midi, generate new sequence
+        generateSequence()
+    else:
+        createMidiFile(events)
+
+generateSequence()
