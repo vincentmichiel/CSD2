@@ -1,1 +1,1 @@
-Repository for CSD2 assignments and projectss
+Repository for CSD2 assignments and projects

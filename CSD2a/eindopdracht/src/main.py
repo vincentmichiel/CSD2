@@ -1,3 +1,4 @@
+from midiutil.MidiFile import MIDIFile
 import wave
 import simpleaudio as sa
 import time
@@ -9,62 +10,62 @@ beatDivisions = [
         "16ths": [
             # 1
             [
-               [90, 40, 60] # low mid high chance
+                [90, 10, 60] # low mid high chance
             ],
             [
-                [10, 40, 90]
+                [10, 10, 90]
             ],
             [
-                [10, 65, 50]
+                [10, 10, 50]
             ],
             [
-                [30, 25, 90]
+                [20, 25, 90]
             ],
             # 2
             [
-                [30, 40, 60] # low mid high chance
-            ],
-           [
-                [10, 40, 90]
+                [20, 80, 60] # low mid high chance
             ],
             [
-                [10, 65, 50]
+                [10, 20, 90]
+            ],
+            [
+                [10, 10, 50]
             ],
             [
                 [15, 25, 90]
             ],
             # 3
             [
-                [50, 40, 60] # low mid high chance
+                [20, 50, 60] # low mid high chance
             ],
             [
-                [10, 40, 90]
+                [10, 5, 90]
             ],
             [
-                [10, 65, 50]
+                [75, 15, 50]
             ],
             [
-                [30, 25, 90]
+                [30, 10, 90]
             ],
             # 4
             [
-                [75, 40, 60] # low mid high chance
+                [90, 10, 60] # low mid high chance
             ],
             [
-                [10, 40, 90]
+                [10, 12, 90]
             ],
             [
                 [10, 65, 50]
             ],
             [
-                [30, 25, 60]
+                [10, 2, 80]
             ],
             # 5
             [
-                [30, 40, 60] # low mid high chance
+                [15, 80, 60] # low mid high chance
             ],
             [
-                [10, 40, 90]
+                [10, 10, 90]
             ],
             [
                 [10, 70, 50]
@@ -142,7 +143,7 @@ high_sample = sampleSelect("high")
 selectedSamples = [low_sample, mid_sample, high_sample]
 
 # calculate 16th time in seconds
-beatTime = 60/(bpm * 4)
+beatTime = (60/(bpm)) / 5
 
 # generate events for low mid and high samples
 
@@ -157,7 +158,10 @@ while sampleIterator < 3: # loop through low mid and high samples
             # generate event on 16th timestamp
             eventStore = {
                 "timestamp": _16th * beatTime,
-                "sample": sampleIterator + 1
+                "sample": sampleIterator + 1,
+                "midiPitch": 60 + sampleIterator,
+                "midiTime": _16th/4,
+                "midiDuration": 0.25
             }
             events.append(eventStore)
         _16th += 1
@@ -195,3 +199,25 @@ while iterator < len(events):
     # wait for next timestamp
     time.sleep(float(events[iterator + 1]["timestamp"]) - float(events[iterator]["timestamp"]))
     iterator += 1
+
+def createMidiFile():
+    # general midi file info
+    mf = MIDIFile(1, file_format=1)     # only 1 track
+    track = 0
+    time = 0
+    mf.addTrackName(track, time, "Generated Beat")
+    mf.addTempo(track, time, bpm)
+    
+    # add events to midi sequence
+    channel = 0
+    volume = 100
+
+    for event in events:
+        mf.addNote(track, channel, event["midiPitch"], event["midiTime"], event["midiDuration"], volume)
+    
+    # write file to disk
+    with open("/Users/vincent/documents/CSD2/CSD2a/eindopdracht/src/output.mid", 'wb') as outf:
+        mf.writeFile(outf)
+
+
+createMidiFile()
