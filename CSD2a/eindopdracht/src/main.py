@@ -1,3 +1,11 @@
+''''
+Python script to generate irregular beat patterns by Vincent Van den Broeck
+This project was made for HKU, CSD2a
+
+> midi reference: https://stackoverflow.com/a/11060178
+
+'''
+
 from midiutil.MidiFile import MIDIFile
 import wave
 import simpleaudio as sa
@@ -7,6 +15,8 @@ import random
 beatDivisions = [
     {
         "division": "5/4",
+        "counts": 5,
+        "timeMultiplier": 2,
         "16ths": [
             # 1
             [
@@ -77,7 +87,26 @@ beatDivisions = [
     },
     {
         "division": "7/8",
-        "16ths": []
+        "counts": 7,
+        "timeMultiplier": 3,
+        "16ths": [
+            #1
+            [[90, 6, 5]],
+            [[5, 2, 70]],
+            [[10, 80, 30]],
+            [[2, 3, 65]],
+            [[85, 3, 10]],
+            [[5, 5, 80]],
+            [[60, 20, 90]],
+            #2
+            [[90, 10, 3]],
+            [[5, 5, 85]],
+            [[10, 40, 70]],
+            [[5, 80, 40]],
+            [[70, 4, 4]],
+            [[2, 5, 90]],
+            [[60, 2, 70]],
+        ]
     }
 ]
 
@@ -143,7 +172,7 @@ high_sample = sampleSelect("high")
 selectedSamples = [low_sample, mid_sample, high_sample]
 
 # calculate 16th time in seconds
-beatTime = (60/(bpm)) / 5
+beatTime = ((60/(bpm)) / beatDivisions[division]["counts"]) * beatDivisions[division]["timeMultiplier"]
 
 # load audio samples
 sampleNames = [
@@ -200,7 +229,7 @@ def generateSequence():
                     "timestamp": _16th * beatTime,
                     "sample": sampleIterator + 1,
                     "midiPitch": 60 + sampleIterator,
-                    "midiTime": _16th/4,
+                    "midiTime": _16th/2,
                     "midiDuration": 0.25
                 }
                 events.append(eventStore)

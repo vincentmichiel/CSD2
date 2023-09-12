@@ -55,8 +55,4 @@ step by step:
 
 
 TODO:
-    - fine-tune 5/4 configuration
-    - add 7/8 time signature
     - better sample selection
-    - midi generator
-    - loop program if user doesnt store midi
