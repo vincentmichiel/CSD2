@@ -56,3 +56,16 @@ step by step:
 
 TODO:
     - better sample selection
+    - time stamp integration
+
+
+
+TIMESTAMPS theorie
+- timestamps in seconden
+sum = 0
+sum += time_duration
+
+
+- vergelijk met zero time      startTime = time.time()
+
+for loop met 0.001s sleep
