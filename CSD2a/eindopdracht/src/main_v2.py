@@ -1,19 +1,19 @@
 ''''
 Python script to generate irregular beat patterns by Vincent Van den Broeck
 Version 2.0 features:
-    > better input handling
-    > better playback timing
+    > more efficient input handling
+    > improved playback timing
 
 This project was made for HKU, CSD2a
-
-> midi reference: https://stackoverflow.com/a/11060178
-
 '''
 
 from midiutil.MidiFile import MIDIFile
 import wave
 import time
 import simpleaudio as sa
+import lightmap_generator
+import midi_generator
+import math
 
 # general variables
 sampleNames = [
@@ -60,6 +60,8 @@ def userInput(dataType, prompt, minValue = 0, maxValue = 1):
 # user input
 division = userInput(int, "Choose beat division. Type 1 for 5/4 or type 2 for 7/8: ", 1, 2) - 1
 bpm = userInput(float, "Choose BPM: ", 1.0, 512.0)
+beatTime = float(60)/bpm
+
 samples = [
     {
         "name": "low",
@@ -79,41 +81,78 @@ for i in range (3):
     index = userInput(int, "Choose " + samples[i]["name"] + " sample " + str(sampleNames[i]) + " (1 - 3): ", 1, 3) - 1
     samples[i]["audioObject"] = sa.WaveObject.from_wave_read(wave.open("/Users/vincent/documents/CSD2/CSD2a/eindopdracht/src/assets/" + sampleNames[i][index], 'rb'))
 
-noteEvents = [
-    {
-        "dur": 0,
-        "timestamp": 1.0,
-        "sample": 0
-    },
-     {
-        "dur": 0,
-        "timestamp": 2.0,
-        "sample": 1
-    },
-     {
-        "dur": 0,
-        "timestamp": 3.0,
-        "sample": 0
-    },
-     {
-        "dur": 0,
-        "timestamp": 3.5,
-        "sample": 2
-    },
-]
+noteEvents = []
+finalEvents = []
+for i in range (beatDivisions[division]["numerator"]):
+    noteEvents.append([])
 
+# generate events
+image, eventData = lightmap_generator.generateEvents(beatDivisions[division]["numerator"])
+largestR = 0
+smallestR = 100
+
+# generate base events
+for event in eventData:
+    beat = math.floor(event["x"] / (image[1]/beatDivisions[division]["numerator"]))
+    if event["r"] > largestR:
+        largestR = event["r"]
+    if event["r"] < smallestR:
+        smallestR = event["r"]
+
+    newEvent = {
+        "x": event["x"],
+        "r": event["r"],
+        "beat": beat,
+        "timestamp": 0,
+        "sample": 0
+    }
+
+    noteEvents[beat].append(newEvent)
+
+# divide radius in 3 bounds
+middle = (smallestR + largestR) / 2
+divider = middle/3
+small = middle - divider
+large = middle + divider
+
+# assign low mid or high sample based on radius
+for beat in noteEvents:
+    eventAmount = 0
+    for event in beat:
+        eventAmount += 1
+        sample = 0
+        if event["r"] <= small:
+            sample = 2
+        elif event["r"] <= large:
+            sample = 1
+
+        event["sample"] = sample
+    
+    # shift beat timing based on number of hits in beat (spread evenly)
+    iterator = 0
+    if eventAmount > 0:
+        beatTiming = 1/eventAmount
+    else:
+        beatTiming = 0
+    for event in beat:
+        event["beat"] = float(event["beat"] + beatTiming * iterator)
+        event["timestamp"] = event["beat"] * beatTime
+        finalEvents.append(event)
+        iterator += 1
+
+noteEvents = finalEvents
 
 def playSeq():
     # play through note events
-    noteEventsCopy = noteEvents
     startTime = time.time()
-    while len(noteEventsCopy) > 0:
-        event = noteEventsCopy[0]
+    i = 0
+    while i < len(noteEvents):
+        event = noteEvents[i]
         if time.time() - startTime >= event["timestamp"]:
             # play sample
             samples[event["sample"]]["audioObject"].play()
-            # remove event from array
-            noteEventsCopy.pop(0)
+            i += 1
         time.sleep(0.001)
     
 playSeq()
+midi_generator.generateMidi(noteEvents, bpm)
