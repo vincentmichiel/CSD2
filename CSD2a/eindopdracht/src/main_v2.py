@@ -81,68 +81,7 @@ for i in range (3):
     index = userInput(int, "Choose " + samples[i]["name"] + " sample " + str(sampleNames[i]) + " (1 - 3): ", 1, 3) - 1
     samples[i]["audioObject"] = sa.WaveObject.from_wave_read(wave.open("/Users/vincent/documents/CSD2/CSD2a/eindopdracht/src/assets/" + sampleNames[i][index], 'rb'))
 
-noteEvents = []
-finalEvents = []
-for i in range (beatDivisions[division]["numerator"]):
-    noteEvents.append([])
-
-# generate events
-image, eventData = lightmap_generator.generateEvents(beatDivisions[division]["numerator"])
-largestR = 0
-smallestR = 100
-
-# generate base events
-for event in eventData:
-    beat = math.floor(event["x"] / (image[1]/beatDivisions[division]["numerator"]))
-    if event["r"] > largestR:
-        largestR = event["r"]
-    if event["r"] < smallestR:
-        smallestR = event["r"]
-
-    newEvent = {
-        "x": event["x"],
-        "r": event["r"],
-        "beat": beat,
-        "timestamp": 0,
-        "sample": 0
-    }
-
-    noteEvents[beat].append(newEvent)
-
-# divide radius in 3 bounds
-middle = (smallestR + largestR) / 2
-divider = middle/3
-small = middle - divider
-large = middle + divider
-
-# assign low mid or high sample based on radius
-for beat in noteEvents:
-    eventAmount = 0
-    for event in beat:
-        eventAmount += 1
-        sample = 0
-        if event["r"] <= small:
-            sample = 2
-        elif event["r"] <= large:
-            sample = 1
-
-        event["sample"] = sample
-    
-    # shift beat timing based on number of hits in beat (spread evenly)
-    iterator = 0
-    if eventAmount > 0:
-        beatTiming = 1/eventAmount
-    else:
-        beatTiming = 0
-    for event in beat:
-        event["beat"] = float(event["beat"] + beatTiming * iterator)
-        event["timestamp"] = event["beat"] * beatTime
-        finalEvents.append(event)
-        iterator += 1
-
-noteEvents = finalEvents
-
-def playSeq():
+def playSeq(noteEvents):
     # play through note events
     startTime = time.time()
     i = 0
@@ -153,6 +92,76 @@ def playSeq():
             samples[event["sample"]]["audioObject"].play()
             i += 1
         time.sleep(0.001)
-    
-playSeq()
-midi_generator.generateMidi(noteEvents, bpm)
+
+def main():
+    noteEvents = []
+    finalEvents = []
+    for i in range (beatDivisions[division]["numerator"]):
+        noteEvents.append([])
+
+    # generate events
+    image, eventData = lightmap_generator.generateEvents(beatDivisions[division]["numerator"])
+    largestR = 0
+    smallestR = 100
+
+    # generate base events
+    for event in eventData:
+        beat = math.floor(event["x"] / (image[1]/beatDivisions[division]["numerator"]))
+        if event["r"] > largestR:
+            largestR = event["r"]
+        if event["r"] < smallestR:
+            smallestR = event["r"]
+
+        newEvent = {
+            "x": event["x"],
+            "r": event["r"],
+            "beat": beat,
+            "timestamp": 0,
+            "sample": 0
+        }
+
+        noteEvents[beat].append(newEvent)
+
+    # divide radius in 3 bounds
+    middle = (smallestR + largestR) / 2
+    divider = middle/3
+    small = middle - divider
+    large = middle + divider
+
+    # assign low mid or high sample based on radius
+    for beat in noteEvents:
+        eventAmount = 0
+        for event in beat:
+            eventAmount += 1
+            sample = 0
+            if event["r"] <= small:
+                sample = 2
+            elif event["r"] <= large:
+                sample = 1
+
+            event["sample"] = sample
+        
+        # shift beat timing based on number of hits in beat (spread evenly)
+        iterator = 0
+        if eventAmount > 0:
+            beatTiming = 1/eventAmount
+        else:
+            beatTiming = 0
+        for event in beat:
+            event["beat"] = float(event["beat"] + beatTiming * iterator)
+            event["timestamp"] = event["beat"] * beatTime
+            finalEvents.append(event)
+            iterator += 1
+
+    noteEvents = finalEvents
+
+    playSeq(noteEvents)
+
+    next = userInput(int, "Type 1 to stop and store to midi, 2 to generate another rhythm: ", 1, 2) - 1
+
+    if next == 1:
+        main()
+    else:
+        midi_generator.generateMidi(noteEvents, bpm)
+
+main()

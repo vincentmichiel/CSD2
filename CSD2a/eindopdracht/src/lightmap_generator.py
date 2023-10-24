@@ -6,10 +6,18 @@ from skimage import measure
 import numpy as np
 import imutils
 import cv2
+import random 
+
+imageIndex = 0
 
 def generateEvents(beatNumerator):
+	global imageIndex
+	imageIndex += 1
+
+	if imageIndex > 3:
+		imageIndex = 1
 	# load the image, convert it to grayscale, and blur it
-	image = cv2.imread("/Users/vincent/Downloads/Big-City-Lights.jpg.webp")
+	image = cv2.imread("/Users/vincent/Documents/CSD2/CSD2a/eindopdracht/src/assets/image"+ str(imageIndex) + ".webp")
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	# apply blur
 	blurred = cv2.GaussianBlur(gray, (11, 11), 0)
