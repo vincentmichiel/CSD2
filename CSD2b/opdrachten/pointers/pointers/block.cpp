@@ -6,3 +6,11 @@
 //
 
 #include "block.hpp"
+
+void Block::setSize(int size){
+    pSize = size;
+}
+
+int Block::getSize(){
+    return pSize;
+}

@@ -10,4 +10,12 @@
 
 #include <stdio.h>
 
+class Block {
+private:
+    int pSize;
+public:
+    void setSize(int size);
+    int getSize();
+};
+
 #endif /* block_hpp */
