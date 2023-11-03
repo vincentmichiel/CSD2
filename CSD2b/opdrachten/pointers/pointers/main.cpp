@@ -1,4 +1,5 @@
 #include <iostream>
+#include "block.hpp"
 
 /*
  Assignment: complete this program by putting your code in all the locations
@@ -30,8 +31,36 @@ int numPowValue(int x){
     return x;
 };
 
+
+
 int main()
 {
+    const int blockAmount = 50;
+    Block* blocks[blockAmount];
+
+    // set sizes
+    for (int i = 0; i < blockAmount; i++) {
+        blocks[i] = new Block();
+        // random size between 1 and 100
+        blocks[i]->setSize(std::rand() % 100 + 1);
+    }
+
+    // get sizes
+    for (int i = 0; i < blockAmount; i++) {
+        std::cout << "Size of block " << i << ": " << blocks[i]->getSize() << std::endl;
+    }
+
+    // deallocate memory
+    for (int i = 0; i < blockAmount; i++) {
+        delete blocks[i];
+    }
+    
+} // main()
+
+
+
+
+void functionsUsingPointers(){
     int myNum = 3;
     // pass myNum to function as value
     // function creates a copy
@@ -49,8 +78,7 @@ int main()
     // function operates on variable through memory adress
     numPow(&myNum);
     std::cout << "value of myNum after function: " << myNum << std::endl;
-} // main()
-
+}
 
 void basicPointerInteraction(){
     char letter = 97; // find this in the ASCII table (type 'man ascii')
