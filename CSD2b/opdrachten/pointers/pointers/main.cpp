@@ -11,8 +11,48 @@
  see and then check if your assumption was correct.
  */
 
+
+int numPow(int &x){
+    x = x * x;
+    std::cout << "value of myNum passed as reference (inside function): " << x << std::endl;
+    return x;
+};
+
+int numPow(int *x){
+    *x = *x * *x;
+    std::cout << "value of myNum passed as pointer (inside function): " << *x << std::endl;
+    return *x;
+};
+
+int numPowValue(int x){
+    x = x * x;
+    std::cout << "value of myNum passed as value (inside function): " << x << std::endl;
+    return x;
+};
+
 int main()
 {
+    int myNum = 3;
+    // pass myNum to function as value
+    // function creates a copy
+    numPowValue(myNum);
+    std::cout << "value of myNum after function: " << myNum << std::endl;
+    
+    myNum = 3;
+    // pass myNum to function as reference
+    // function operatates directly on the variable
+    numPow(myNum);
+    std::cout << "value of myNum after function: " << myNum << std::endl;
+    
+    myNum = 3;
+    // pass myNum to function as pointer
+    // function operates on variable through memory adress
+    numPow(&myNum);
+    std::cout << "value of myNum after function: " << myNum << std::endl;
+} // main()
+
+
+void basicPointerInteraction(){
     char letter = 97; // find this in the ASCII table (type 'man ascii')
     char *letterpointer;
     
@@ -80,7 +120,5 @@ int main()
     
     std::cout << "Contents of anotheryearpointer after ++: ";
     std::cout << *anotheryearpointer << std::endl;
-    
-    
-} // main()
+}
 
