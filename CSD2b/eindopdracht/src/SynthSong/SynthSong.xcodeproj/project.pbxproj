@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BF10D8D92AF5950700C0FC14 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF10D8D82AF5950700C0FC14 /* main.cpp */; };
-		BF10D8E12AF59FDC00C0FC14 /* block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF10D8DF2AF59FDC00C0FC14 /* block.cpp */; };
+		BF6D23CD2AF8098A0026AD54 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6D23CC2AF8098A0026AD54 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		BF10D8D32AF5950700C0FC14 /* CopyFiles */ = {
+		BF6D23C72AF8098A0026AD54 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -24,14 +23,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		BF10D8D52AF5950700C0FC14 /* pointers */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pointers; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF10D8D82AF5950700C0FC14 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		BF10D8DF2AF59FDC00C0FC14 /* block.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = block.cpp; sourceTree = "<group>"; };
-		BF10D8E02AF59FDC00C0FC14 /* block.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = block.hpp; sourceTree = "<group>"; };
+		BF6D23C92AF8098A0026AD54 /* SynthSong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SynthSong; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF6D23CC2AF8098A0026AD54 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BF10D8D22AF5950700C0FC14 /* Frameworks */ = {
+		BF6D23C62AF8098A0026AD54 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -41,67 +38,65 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BF10D8CC2AF5950700C0FC14 = {
+		BF6D23C02AF8098A0026AD54 = {
 			isa = PBXGroup;
 			children = (
-				BF10D8D72AF5950700C0FC14 /* pointers */,
-				BF10D8D62AF5950700C0FC14 /* Products */,
+				BF6D23CB2AF8098A0026AD54 /* SynthSong */,
+				BF6D23CA2AF8098A0026AD54 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		BF10D8D62AF5950700C0FC14 /* Products */ = {
+		BF6D23CA2AF8098A0026AD54 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BF10D8D52AF5950700C0FC14 /* pointers */,
+				BF6D23C92AF8098A0026AD54 /* SynthSong */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BF10D8D72AF5950700C0FC14 /* pointers */ = {
+		BF6D23CB2AF8098A0026AD54 /* SynthSong */ = {
 			isa = PBXGroup;
 			children = (
-				BF10D8D82AF5950700C0FC14 /* main.cpp */,
-				BF10D8DF2AF59FDC00C0FC14 /* block.cpp */,
-				BF10D8E02AF59FDC00C0FC14 /* block.hpp */,
+				BF6D23CC2AF8098A0026AD54 /* main.cpp */,
 			);
-			path = pointers;
+			path = SynthSong;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BF10D8D42AF5950700C0FC14 /* pointers */ = {
+		BF6D23C82AF8098A0026AD54 /* SynthSong */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BF10D8DC2AF5950700C0FC14 /* Build configuration list for PBXNativeTarget "pointers" */;
+			buildConfigurationList = BF6D23D02AF8098A0026AD54 /* Build configuration list for PBXNativeTarget "SynthSong" */;
 			buildPhases = (
-				BF10D8D12AF5950700C0FC14 /* Sources */,
-				BF10D8D22AF5950700C0FC14 /* Frameworks */,
-				BF10D8D32AF5950700C0FC14 /* CopyFiles */,
+				BF6D23C52AF8098A0026AD54 /* Sources */,
+				BF6D23C62AF8098A0026AD54 /* Frameworks */,
+				BF6D23C72AF8098A0026AD54 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = pointers;
-			productName = pointers;
-			productReference = BF10D8D52AF5950700C0FC14 /* pointers */;
+			name = SynthSong;
+			productName = SynthSong;
+			productReference = BF6D23C92AF8098A0026AD54 /* SynthSong */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		BF10D8CD2AF5950700C0FC14 /* Project object */ = {
+		BF6D23C12AF8098A0026AD54 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
-					BF10D8D42AF5950700C0FC14 = {
+					BF6D23C82AF8098A0026AD54 = {
 						CreatedOnToolsVersion = 15.0.1;
 					};
 				};
 			};
-			buildConfigurationList = BF10D8D02AF5950700C0FC14 /* Build configuration list for PBXProject "pointers" */;
+			buildConfigurationList = BF6D23C42AF8098A0026AD54 /* Build configuration list for PBXProject "SynthSong" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -109,30 +104,29 @@
 				en,
 				Base,
 			);
-			mainGroup = BF10D8CC2AF5950700C0FC14;
-			productRefGroup = BF10D8D62AF5950700C0FC14 /* Products */;
+			mainGroup = BF6D23C02AF8098A0026AD54;
+			productRefGroup = BF6D23CA2AF8098A0026AD54 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BF10D8D42AF5950700C0FC14 /* pointers */,
+				BF6D23C82AF8098A0026AD54 /* SynthSong */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		BF10D8D12AF5950700C0FC14 /* Sources */ = {
+		BF6D23C52AF8098A0026AD54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF10D8D92AF5950700C0FC14 /* main.cpp in Sources */,
-				BF10D8E12AF59FDC00C0FC14 /* block.cpp in Sources */,
+				BF6D23CD2AF8098A0026AD54 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		BF10D8DA2AF5950700C0FC14 /* Debug */ = {
+		BF6D23CE2AF8098A0026AD54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -193,7 +187,7 @@
 			};
 			name = Debug;
 		};
-		BF10D8DB2AF5950700C0FC14 /* Release */ = {
+		BF6D23CF2AF8098A0026AD54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -247,7 +241,7 @@
 			};
 			name = Release;
 		};
-		BF10D8DD2AF5950700C0FC14 /* Debug */ = {
+		BF6D23D12AF8098A0026AD54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -255,7 +249,7 @@
 			};
 			name = Debug;
 		};
-		BF10D8DE2AF5950700C0FC14 /* Release */ = {
+		BF6D23D22AF8098A0026AD54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -266,25 +260,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BF10D8D02AF5950700C0FC14 /* Build configuration list for PBXProject "pointers" */ = {
+		BF6D23C42AF8098A0026AD54 /* Build configuration list for PBXProject "SynthSong" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BF10D8DA2AF5950700C0FC14 /* Debug */,
-				BF10D8DB2AF5950700C0FC14 /* Release */,
+				BF6D23CE2AF8098A0026AD54 /* Debug */,
+				BF6D23CF2AF8098A0026AD54 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BF10D8DC2AF5950700C0FC14 /* Build configuration list for PBXNativeTarget "pointers" */ = {
+		BF6D23D02AF8098A0026AD54 /* Build configuration list for PBXNativeTarget "SynthSong" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BF10D8DD2AF5950700C0FC14 /* Debug */,
-				BF10D8DE2AF5950700C0FC14 /* Release */,
+				BF6D23D12AF8098A0026AD54 /* Debug */,
+				BF6D23D22AF8098A0026AD54 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = BF10D8CD2AF5950700C0FC14 /* Project object */;
+	rootObject = BF6D23C12AF8098A0026AD54 /* Project object */;
 }

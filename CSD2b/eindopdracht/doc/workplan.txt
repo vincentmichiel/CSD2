@@ -1,0 +1,26 @@
+SynthSong work plan
+
+Oscillator common properties:
+	- frequency
+	- amplitude
+	- phase
+	- buffersize
+	- buffer
+	- i/o with start and stop functions
+
+Oscillator types and their specific properties:
+	- sine
+	- square
+	    - duty cycle
+	- triangle
+	- noise
+
+
+Synthesizer properties:
+	- volume
+	- oscillator i/o
+	- midi note / frequency to play
+	- adsr
+	- fm/additive
+	
+
