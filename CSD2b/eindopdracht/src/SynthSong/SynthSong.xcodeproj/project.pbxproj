@@ -7,7 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF45FDE52AFAE46000385CC7 /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF45FDE32AFAE46000385CC7 /* Oscillator.cpp */; };
 		BF6D23CD2AF8098A0026AD54 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6D23CC2AF8098A0026AD54 /* main.cpp */; };
+		BF6D23D72AF81BAF0026AD54 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23D62AF81BAF0026AD54 /* CoreAudio.framework */; };
+		BF6D23D92AF81BBA0026AD54 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23D82AF81BBA0026AD54 /* AudioToolbox.framework */; };
+		BF6D23DB2AF81BC50026AD54 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23DA2AF81BC50026AD54 /* AudioUnit.framework */; };
+		BF6D23DD2AF81BD10026AD54 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23DC2AF81BD10026AD54 /* CoreServices.framework */; };
+		BF6D23DF2AF81BDA0026AD54 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23DE2AF81BDA0026AD54 /* Carbon.framework */; };
+		BF6D23E12AF820460026AD54 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23E02AF820460026AD54 /* CoreFoundation.framework */; };
+		BF6D23E42AF824C70026AD54 /* audio_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6D23E22AF824C70026AD54 /* audio_io.cpp */; };
+		BFDE8AFA2AF82BA00009808E /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23D42AF80BD10026AD54 /* libportaudio.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +32,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BF45FDE32AFAE46000385CC7 /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
+		BF45FDE42AFAE46000385CC7 /* Oscillator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Oscillator.hpp; sourceTree = "<group>"; };
+		BF45FDE72AFAE73A00385CC7 /* Constants.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Constants.hpp; sourceTree = "<group>"; };
 		BF6D23C92AF8098A0026AD54 /* SynthSong */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SynthSong; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF6D23CC2AF8098A0026AD54 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		BF6D23D42AF80BD10026AD54 /* libportaudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libportaudio.a; path = ../../../../../../../../usr/local/lib/libportaudio.a; sourceTree = "<group>"; };
+		BF6D23D62AF81BAF0026AD54 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		BF6D23D82AF81BBA0026AD54 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		BF6D23DA2AF81BC50026AD54 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		BF6D23DC2AF81BD10026AD54 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
+		BF6D23DE2AF81BDA0026AD54 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		BF6D23E02AF820460026AD54 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		BF6D23E22AF824C70026AD54 /* audio_io.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_io.cpp; sourceTree = "<group>"; };
+		BF6D23E32AF824C70026AD54 /* audio_io.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_io.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +53,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF6D23E12AF820460026AD54 /* CoreFoundation.framework in Frameworks */,
+				BF6D23DF2AF81BDA0026AD54 /* Carbon.framework in Frameworks */,
+				BF6D23DD2AF81BD10026AD54 /* CoreServices.framework in Frameworks */,
+				BF6D23DB2AF81BC50026AD54 /* AudioUnit.framework in Frameworks */,
+				BF6D23D92AF81BBA0026AD54 /* AudioToolbox.framework in Frameworks */,
+				BFDE8AFA2AF82BA00009808E /* libportaudio.a in Frameworks */,
+				BF6D23D72AF81BAF0026AD54 /* CoreAudio.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +71,7 @@
 			children = (
 				BF6D23CB2AF8098A0026AD54 /* SynthSong */,
 				BF6D23CA2AF8098A0026AD54 /* Products */,
+				BF6D23D32AF80BD00026AD54 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +87,27 @@
 			isa = PBXGroup;
 			children = (
 				BF6D23CC2AF8098A0026AD54 /* main.cpp */,
+				BF6D23E22AF824C70026AD54 /* audio_io.cpp */,
+				BF6D23E32AF824C70026AD54 /* audio_io.hpp */,
+				BF45FDE32AFAE46000385CC7 /* Oscillator.cpp */,
+				BF45FDE42AFAE46000385CC7 /* Oscillator.hpp */,
+				BF45FDE72AFAE73A00385CC7 /* Constants.hpp */,
 			);
 			path = SynthSong;
+			sourceTree = "<group>";
+		};
+		BF6D23D32AF80BD00026AD54 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF6D23E02AF820460026AD54 /* CoreFoundation.framework */,
+				BF6D23DE2AF81BDA0026AD54 /* Carbon.framework */,
+				BF6D23DC2AF81BD10026AD54 /* CoreServices.framework */,
+				BF6D23DA2AF81BC50026AD54 /* AudioUnit.framework */,
+				BF6D23D82AF81BBA0026AD54 /* AudioToolbox.framework */,
+				BF6D23D62AF81BAF0026AD54 /* CoreAudio.framework */,
+				BF6D23D42AF80BD10026AD54 /* libportaudio.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +167,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF6D23E42AF824C70026AD54 /* audio_io.cpp in Sources */,
 				BF6D23CD2AF8098A0026AD54 /* main.cpp in Sources */,
+				BF45FDE52AFAE46000385CC7 /* Oscillator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +295,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -253,6 +306,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				"HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

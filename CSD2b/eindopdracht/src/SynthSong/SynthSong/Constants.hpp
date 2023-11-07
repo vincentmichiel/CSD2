@@ -8,6 +8,8 @@
 #ifndef Constants_hpp
 #define Constants_hpp
 
-#include <stdio.h>
+#define SAMPLERATE        48000
+#define FRAMESPERBUFFER 64
+#define NROFCHANNELS 2
 
 #endif /* Constants_hpp */
