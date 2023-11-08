@@ -8,10 +8,9 @@
 #include "Oscillator.hpp"
 #include "audio_io.hpp"
 
-Oscillator::Oscillator(double initFreq, double initAmp, double initPhase, int initOutputDevice){
+Oscillator::Oscillator(double initFreq, double initAmp, int initOutputDevice){
     freq = initFreq;
     amp = initAmp;
-    phase = initPhase;
     playState = false;
     x = 0; // sample index
     output_device = initOutputDevice;
@@ -41,10 +40,6 @@ void Oscillator::setAmp(double newAmp){
     amp = newAmp;
 };
 
-void Oscillator::setPhase(double newPhase){
-    phase = newPhase;
-};
-
 void Oscillator::start(){
     // create new thread
     audioThread = std::thread([this] {
@@ -64,15 +59,60 @@ void Oscillator::stop(){
     }
 };
 
-Square::Square(double initFreq, double initAmp, double initPhase, double initDutyCycle, int initOutputDevice) : Oscillator(initFreq, initAmp, initPhase, initOutputDevice), dutyCycle(initDutyCycle) {
+Square::Square(double initFreq, double initAmp, double initDutyCycle, int initOutputDevice) : Oscillator(initFreq, initAmp, initOutputDevice), dutyCycle(initDutyCycle) {
     dutyCycle = initDutyCycle;
 };
 
-Noise::Noise(double initAmp) : Oscillator(0.0, initAmp, 0.0) {
+Noise::Noise(double initAmp) : Oscillator(0.0, initAmp, 0) {
     amp = initAmp;
+    randomEngine = std::default_random_engine(std::random_device()());
+    distribution = std::uniform_real_distribution<float>(-1.0, 1.0);
+}
+
+// audio callback and sound generation
+float Oscillator::sampleGenerator(unsigned long timeIndex) {
+    // sine wave as default
+    return (float)(amp * (sin((double)timeIndex * freq/SAMPLERATE * M_PI * 2.)));
 };
 
-// audio callback
+float Sine::sampleGenerator(unsigned long timeIndex){
+    // sine wave
+    return (float)(amp * (sin((double)timeIndex * freq/SAMPLERATE * M_PI * 2.)));
+};
+
+float Square::sampleGenerator(unsigned long timeIndex){
+    // square wave
+    double t = (double)timeIndex / SAMPLERATE; // time index in seconds
+    double period = 1.0 / freq;
+    double halfPeriod = period / 2;
+    double phase = fmod(t, period);
+    
+    return (float)(amp * (phase < (halfPeriod * dutyCycle) ? 1.0 : -1.0));
+};
+
+float Triangle::sampleGenerator(unsigned long timeIndex) {
+    // Triangle wave
+        double t = (double)timeIndex / SAMPLERATE; // time index in seconds
+        double period = 1.0 / freq;
+        double phase = fmod(t, period); // t % period
+
+        double amplitude = 2.0 * amp / period;
+        double triangleValue = 0.0;
+
+        if (phase < (period / 2.0)) { // rising part of wave
+            triangleValue = amplitude * phase - amp;
+        } else { // falling part of wave
+            triangleValue = -amplitude * (phase - period) + amp;
+        }
+
+        return (float)triangleValue;
+};
+
+float Noise::sampleGenerator(unsigned long timeIndex){
+    // random for noise
+    return amp * distribution(randomEngine);
+};
+
 void Oscillator::audioCallback(){
     do {
         // Fill a new buffer with samples
@@ -80,8 +120,7 @@ void Oscillator::audioCallback(){
         {
             // loop over the channels in one frame
             for(int channel=0;channel<NROFCHANNELS;channel++){
-                samplebuffer[bufptr+channel] =
-                (float)(amp * (sin((double)x * freq/SAMPLERATE * M_PI * 2.)));
+                samplebuffer[bufptr+channel] = sampleGenerator(x);
             } // for channel
             x++; // advance to next time index
         } // for buffer index
