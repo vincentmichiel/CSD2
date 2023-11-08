@@ -9,7 +9,9 @@
 #define Oscillator_hpp
 
 #include <stdio.h>
+#include <thread>
 #include "Constants.hpp"
+#include "audio_io.hpp"
 
 class Oscillator {
 protected:
@@ -21,11 +23,14 @@ protected:
     unsigned long x; // sample index
     bool playState;
     int output_device;
+    Audio_IO audiostream;
     void audioCallback();
+    std::thread audioThread;
     
     
 public:
     Oscillator(double initFreq = 440.0, double initAmp = 0.5, double initPhase = 0.0, int initOutputDevice = 0);
+    ~Oscillator();
     void setFreq(double newFreq);
     void setAmp(double newAmp);
     void setPhase(double newPhase);

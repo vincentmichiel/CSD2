@@ -8,7 +8,7 @@
 #ifndef Constants_hpp
 #define Constants_hpp
 
-#define SAMPLERATE        48000
+#define SAMPLERATE      48000
 #define FRAMESPERBUFFER 64
 #define NROFCHANNELS 2
 
