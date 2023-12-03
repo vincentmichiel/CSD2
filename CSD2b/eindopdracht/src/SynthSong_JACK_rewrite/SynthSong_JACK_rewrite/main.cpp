@@ -29,7 +29,7 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample
-            float sample = sin (phase * pi * 2.0f);
+            float sample = sin (phase * pi * 2.0f) > 0 ? 1 : -1;
             // write sample to buffer at channel 0
             buffer.outputChannels[0][i] = sample;
             phase += frequency / samplerate;
