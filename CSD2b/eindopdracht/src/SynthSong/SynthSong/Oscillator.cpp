@@ -40,6 +40,10 @@ void Oscillator::setAmp(double newAmp){
     amp = newAmp;
 };
 
+double Oscillator::getAmp(){
+    return amp;
+};
+
 void Oscillator::start(){
     // create new thread
     audioThread = std::thread([this] {

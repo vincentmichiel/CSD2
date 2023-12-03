@@ -14,6 +14,13 @@
 #include "Constants.hpp"
 #include "audio_io.hpp"
 
+enum class OscillatorType {
+    Sine,
+    Square,
+    Triangle,
+    Noise
+};
+
 class Oscillator {
 private:
     float samplebuffer[FRAMESPERBUFFER * NROFCHANNELS];
@@ -35,6 +42,7 @@ public:
     ~Oscillator();
     void setFreq(double newFreq);
     void setAmp(double newAmp);
+    double getAmp();
     void start();
     void stop();
 };

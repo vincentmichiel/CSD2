@@ -16,6 +16,7 @@
 		BF6D23DF2AF81BDA0026AD54 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23DE2AF81BDA0026AD54 /* Carbon.framework */; };
 		BF6D23E12AF820460026AD54 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23E02AF820460026AD54 /* CoreFoundation.framework */; };
 		BF6D23E42AF824C70026AD54 /* audio_io.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6D23E22AF824C70026AD54 /* audio_io.cpp */; };
+		BF6F1C472AFCEE5D00EA353F /* Synthesizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF6F1C452AFCEE5D00EA353F /* Synthesizer.cpp */; };
 		BFDE8AFA2AF82BA00009808E /* libportaudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6D23D42AF80BD10026AD54 /* libportaudio.a */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,8 @@
 		BF6D23E02AF820460026AD54 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		BF6D23E22AF824C70026AD54 /* audio_io.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = audio_io.cpp; sourceTree = "<group>"; };
 		BF6D23E32AF824C70026AD54 /* audio_io.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = audio_io.hpp; sourceTree = "<group>"; };
+		BF6F1C452AFCEE5D00EA353F /* Synthesizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Synthesizer.cpp; sourceTree = "<group>"; };
+		BF6F1C462AFCEE5D00EA353F /* Synthesizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Synthesizer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +95,8 @@
 				BF45FDE32AFAE46000385CC7 /* Oscillator.cpp */,
 				BF45FDE42AFAE46000385CC7 /* Oscillator.hpp */,
 				BF45FDE72AFAE73A00385CC7 /* Constants.hpp */,
+				BF6F1C452AFCEE5D00EA353F /* Synthesizer.cpp */,
+				BF6F1C462AFCEE5D00EA353F /* Synthesizer.hpp */,
 			);
 			path = SynthSong;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF6F1C472AFCEE5D00EA353F /* Synthesizer.cpp in Sources */,
 				BF6D23E42AF824C70026AD54 /* audio_io.cpp in Sources */,
 				BF6D23CD2AF8098A0026AD54 /* main.cpp in Sources */,
 				BF45FDE52AFAE46000385CC7 /* Oscillator.cpp in Sources */,

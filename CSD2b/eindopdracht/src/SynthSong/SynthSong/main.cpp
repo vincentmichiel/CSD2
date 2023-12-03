@@ -8,15 +8,9 @@
 #include "audio_io.hpp"
 #include "Constants.hpp"
 #include "Oscillator.hpp"
-
-using namespace std;
-
-
-#define NUM_SECONDS        1
+#include "Synthesizer.hpp"
 
 int output_device = 0;
-
-
 
 int main(int argc,char** argv)
 {
@@ -24,18 +18,18 @@ int main(int argc,char** argv)
     Audio_IO audiostream;
     audiostream.initialise();
     audiostream.list_devices();
-    cout << "Give output device number: ";
-    cin >> output_device;
+    std::cout << "Give output device number: ";
+    std::cin >> output_device;
     audiostream.terminate();
     
-    Triangle sine1;
+    Synthesizer synth;
+    synth.setAmp(1);
+    synth.playNote(60, 0.5, 2000);
+    std::cout << "main" << std::endl;
     
-    
-    sine1.setAmp(0.05);
-    sine1.start();
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    sine1.stop();
-    
-    
+    // close audio thread
+    if (synth.oscillatorThread.joinable()) {
+        synth.oscillatorThread.join();  // Wait for the audio thread to complete
+    }
     return 0;
 } // main()
