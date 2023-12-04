@@ -25,14 +25,18 @@ public:
         // open text file
         std::ofstream outfile;
         outfile.open("waveform.txt");
+        float phaseCycle = 0.0;
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
             float sample = oscillator.getSample();
             buffer.outputChannels[0][i] = sample;
             
+            if (oscillator.nextCycle) ++phaseCycle;
+            oscillator.nextCycle = false;
+            
             // write to text file
-            outfile << oscillator.getPhase() << ":" << sample << std::endl;
+            outfile << oscillator.getPhase() + phaseCycle << ":" << sample << std::endl;
             
             oscillator.tick();
         }
@@ -42,7 +46,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Square oscillator = Square(440, 0.5, samplerate);
+    Triangle oscillator = Triangle(440, 1, samplerate);
 };
 
 // ================================================================================

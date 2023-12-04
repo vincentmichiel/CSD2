@@ -11,6 +11,7 @@ Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : fre
   amplitude(amplitude), phase(0), sample(0), samplerate(samplerate)
 {
     sampleDuration = frequency / samplerate;
+    nextCycle = false;
 }
 
 Oscillator::~Oscillator() {
@@ -52,6 +53,7 @@ void Oscillator::tick(){
     phase += sampleDuration;
     if(phase > 1.0f) {
         phase -= 1.0f;
+        nextCycle = true;
     }
 }
 
@@ -65,4 +67,11 @@ void Square::tick(){
     Oscillator::tick();
     // calculate sample
     sample = (sin(pi * 2 * phase) > 0 ? 1 : -1) * amplitude;
+}
+
+void Triangle::tick() {
+    Oscillator::tick();
+    
+    // Create a triangle wave using an absolute sawtooth
+    sample = (-2.0f * abs(phase - 0.5f)) * amplitude;
 }

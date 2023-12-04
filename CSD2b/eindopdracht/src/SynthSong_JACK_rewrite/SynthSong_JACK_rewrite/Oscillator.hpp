@@ -22,6 +22,7 @@ public:
     double getAmplitude();
     float getSample();
     float getPhase();
+    bool nextCycle;
 
 protected:
     const float pi = acos (-1);  //atan(1) * 4; <-- vak van Pieter.
@@ -30,11 +31,11 @@ protected:
     float phase;
     // sample contains the current sample
     float sample;
-    float sampleDuration;
     virtual void tick() = 0;
     
 private:
     float samplerate;
+    float sampleDuration;
 };
 
 class Sine : public Oscillator {
@@ -44,6 +45,12 @@ public:
 };
 
 class Square : public Oscillator {
+public:
+    void tick();
+    using Oscillator::Oscillator;
+};
+
+class Triangle : public Oscillator {
 public:
     void tick();
     using Oscillator::Oscillator;
