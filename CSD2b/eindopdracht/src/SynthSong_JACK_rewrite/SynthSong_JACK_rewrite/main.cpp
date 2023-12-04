@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include "Oscillator.hpp"
 
 
 /*
@@ -16,10 +17,8 @@ class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
+        sine.setSamplerate(samplerate);
     }
-
-    // ___QUESTION___
-    // Why do we need to 'wrap' phase to 0 after > 1 and thereby keep it between the range [0,1]?
 
     // audio callback function
     void process (AudioBuffer buffer) override {
@@ -28,26 +27,22 @@ public:
         outfile.open("waveform.txt");
         
         for (int i = 0; i < buffer.numFrames; ++i) {
-            // calculate sample
-            float sample = sin (phase * pi * 2.0f) > 0 ? 1 : -1;
-            // write sample to buffer at channel 0
+            // calculate sample and write to audio buffer
+            float sample = sine.getSample();
             buffer.outputChannels[0][i] = sample;
-            phase += frequency / samplerate;
-            if (phase > 1.0f) {
-              phase -= 1.0f;
-            }
+            
             // write to text file
-            outfile << phase << ":" << sample << std::endl;
+            outfile << sine.getPhase() << ":" << sample << std::endl;
+            
+            sine.tick();
         }
         // close text file
         outfile.close();
     }
 
 private:
-    const float pi = acos (-1);  //atan(1) * 4; <-- vak van Pieter.
-    float phase = 0;
-    float frequency = 440;
-    float samplerate;
+    float samplerate = 44100;
+    Sine sine = Sine(440, 1, samplerate);
 };
 
 // ================================================================================
@@ -55,7 +50,6 @@ private:
 int main() {
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
-
     jackModule.init (0, 1);
     
     // clear plot file
