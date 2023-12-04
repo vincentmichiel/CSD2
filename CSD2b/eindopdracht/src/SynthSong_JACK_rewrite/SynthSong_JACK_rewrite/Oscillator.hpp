@@ -43,5 +43,11 @@ public:
     using Oscillator::Oscillator;
 };
 
+class Square : public Oscillator {
+public:
+    void tick() override;
+    using Oscillator::Oscillator;
+};
+
 
 #endif /* Oscillator_hpp */

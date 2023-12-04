@@ -8,7 +8,7 @@
 #include "Oscillator.hpp"
 
 Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : frequency(frequency),
-  amplitude(1.0), phase(0), sample(0), samplerate(samplerate)
+  amplitude(amplitude), phase(0), sample(0), samplerate(samplerate)
 {
     sampleDuration = frequency / samplerate;
 }
@@ -57,4 +57,12 @@ void Sine::tick(){
         phase -= 1.0f;
     }
     sample = sin(pi * 2 * phase) * amplitude;
+}
+
+void Square::tick(){
+    phase += sampleDuration;
+    if(phase > 1.0f) {
+        phase -= 1.0f;
+    }
+    sample = (sin(pi * 2 * phase) > 0 ? 1 : -1) * amplitude;
 }

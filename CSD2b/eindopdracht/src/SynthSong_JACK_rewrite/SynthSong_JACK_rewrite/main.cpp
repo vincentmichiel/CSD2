@@ -17,7 +17,7 @@ class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
-        sine.setSamplerate(samplerate);
+        oscillator.setSamplerate(samplerate);
     }
 
     // audio callback function
@@ -28,13 +28,13 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = sine.getSample();
+            float sample = oscillator.getSample();
             buffer.outputChannels[0][i] = sample;
             
             // write to text file
-            outfile << sine.getPhase() << ":" << sample << std::endl;
+            outfile << oscillator.getPhase() << ":" << sample << std::endl;
             
-            sine.tick();
+            oscillator.tick();
         }
         // close text file
         outfile.close();
@@ -42,7 +42,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Sine sine = Sine(440, 1, samplerate);
+    Square oscillator = Square(440, 0.5, samplerate);
 };
 
 // ================================================================================
