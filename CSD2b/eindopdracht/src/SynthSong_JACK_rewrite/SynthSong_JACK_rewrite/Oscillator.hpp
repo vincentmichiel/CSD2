@@ -31,7 +31,7 @@ protected:
     // sample contains the current sample
     float sample;
     float sampleDuration;
-    virtual void tick();
+    virtual void tick() = 0;
     
 private:
     float samplerate;
