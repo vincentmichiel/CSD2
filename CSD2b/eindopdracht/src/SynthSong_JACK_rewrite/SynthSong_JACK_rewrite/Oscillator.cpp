@@ -48,21 +48,18 @@ float Oscillator::getPhase(){
 }
 
 void Oscillator::tick(){
-    
-}
-
-void Sine::tick(){
     phase += sampleDuration;
     if(phase > 1.0f) {
         phase -= 1.0f;
     }
+}
+
+void Sine::tick(){
+    Oscillator::tick();
     sample = sin(pi * 2 * phase) * amplitude;
 }
 
 void Square::tick(){
-    phase += sampleDuration;
-    if(phase > 1.0f) {
-        phase -= 1.0f;
-    }
+    Oscillator::tick();
     sample = (sin(pi * 2 * phase) > 0 ? 1 : -1) * amplitude;
 }
