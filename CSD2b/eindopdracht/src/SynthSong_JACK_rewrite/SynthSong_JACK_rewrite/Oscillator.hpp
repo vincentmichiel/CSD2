@@ -39,13 +39,13 @@ private:
 
 class Sine : public Oscillator {
 public:
-    void tick() override;
+    void tick();
     using Oscillator::Oscillator;
 };
 
 class Square : public Oscillator {
 public:
-    void tick() override;
+    void tick();
     using Oscillator::Oscillator;
 };
 
