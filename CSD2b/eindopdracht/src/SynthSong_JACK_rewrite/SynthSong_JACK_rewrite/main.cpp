@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include "Oscillator.hpp"
+#include "Synth.hpp"
 
 
 /*
@@ -17,7 +18,12 @@ class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
-        oscillator.setSamplerate(samplerate);
+        oscillator->setSamplerate(samplerate);
+    }
+    
+    ~CustomCallback(){
+        AudioCallback::~AudioCallback();
+        delete oscillator;
     }
 
     // audio callback function
@@ -29,16 +35,17 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = oscillator.getSample();
+            float sample = oscillator->getSample();
+            
             buffer.outputChannels[0][i] = sample;
             
-            if (oscillator.nextCycle) ++phaseCycle;
-            oscillator.nextCycle = false;
+            if (oscillator->nextCycle) ++phaseCycle;
+            oscillator->nextCycle = false;
             
             // write to text file
-            outfile << oscillator.getPhase() + phaseCycle << ":" << sample << std::endl;
+            outfile << oscillator->getPhase() + phaseCycle << ":" << sample << std::endl;
             
-            oscillator.tick();
+            oscillator->tick();
         }
         // close text file
         outfile.close();
@@ -46,7 +53,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Triangle oscillator = Triangle(440, 1, samplerate);
+    Oscillator * oscillator = new Sine(440, 1, samplerate);
 };
 
 // ================================================================================
@@ -55,6 +62,9 @@ int main() {
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
     jackModule.init (0, 1);
+    
+    Synth * synth = new Synth();
+    delete synth;
     
     // clear plot file
     std::ofstream ofs;

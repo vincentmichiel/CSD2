@@ -14,7 +14,7 @@
 class Oscillator {
 public:
     Oscillator(float frequency = 440, float amplitude = 1, float samplerate = 44100);
-    ~Oscillator();
+    virtual ~Oscillator();
     void setSamplerate(float samplerate);
     void setFrequency(float frequency);
     void setAmplitude(float amplitude);
@@ -22,6 +22,7 @@ public:
     double getAmplitude();
     float getSample();
     float getPhase();
+    virtual void tick() = 0;
     bool nextCycle;
 
 protected:
@@ -31,7 +32,6 @@ protected:
     float phase;
     // sample contains the current sample
     float sample;
-    virtual void tick() = 0;
     
 private:
     float samplerate;

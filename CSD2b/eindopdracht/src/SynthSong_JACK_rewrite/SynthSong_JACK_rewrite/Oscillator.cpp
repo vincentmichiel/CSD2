@@ -6,6 +6,7 @@
 //
 
 #include "Oscillator.hpp"
+#include <iostream>
 
 Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : frequency(frequency),
   amplitude(amplitude), phase(0), sample(0), samplerate(samplerate)
@@ -15,7 +16,7 @@ Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : fre
 }
 
 Oscillator::~Oscillator() {
-  
+    std::cout << "oscillator removed" << std::endl;
 }
 
 void Oscillator::setSamplerate(float samplerate){
@@ -25,7 +26,7 @@ void Oscillator::setSamplerate(float samplerate){
 
 void Oscillator::setFrequency(float frequency){
     this->frequency = frequency;
-    sampleDuration = sample / samplerate;
+    sampleDuration = frequency / samplerate;
 }
 
 void Oscillator::setAmplitude(float amplitude){
@@ -73,5 +74,5 @@ void Triangle::tick() {
     Oscillator::tick();
     
     // Create a triangle wave using an absolute sawtooth
-    sample = (-2.0f * abs(phase - 0.5f)) * amplitude;
+    sample = (-4.0f * abs(phase - 0.5f) + 1) * amplitude;
 }

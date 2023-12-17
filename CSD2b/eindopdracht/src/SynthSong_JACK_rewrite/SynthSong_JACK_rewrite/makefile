@@ -6,8 +6,8 @@ CC = g++
 CFLAGS = -Wall -std=c++17
 LDFLAGS=-ljack
 PROG = main
-SRC = main.cpp Oscillator.cpp
-OBJS = main.o Oscillator.o
+SRC = main.cpp Oscillator.cpp Synth.cpp
+OBJS = main.o Oscillator.o Synth.o
 
 $(PROG): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
