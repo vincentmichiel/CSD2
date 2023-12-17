@@ -39,6 +39,18 @@ void Synth::setAmp(double amp){
     this->amp = amp;
 };
 
+void Synth::setFrequency(float frequency){
+    this->frequency = frequency;
+};
+
+void Synth::setRatio(int ratio){
+    
+}
+
+void Synth::setDepth(float depth){
+    
+}
+
 float Synth::getSample(){
     return oscillators[0]->getSample() * amp;
 }
@@ -49,6 +61,10 @@ float Synth::getPhase(){
 
 double Synth::getAmp(){
     return amp;
+}
+
+float Synth::getFrequency(){
+    return frequency;
 }
 
 void Synth::tick(){

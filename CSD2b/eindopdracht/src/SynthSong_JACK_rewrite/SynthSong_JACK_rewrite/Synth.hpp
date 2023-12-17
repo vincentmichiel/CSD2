@@ -20,6 +20,7 @@ private:
     
 protected:
     double amp;
+    float frequency;
     int voices;
     // array of oscillators
     std::vector<std::unique_ptr<Oscillator>> oscillators;
@@ -29,14 +30,18 @@ public:
     Synth(double amp = 1.0, int voices = 1);
     virtual ~Synth();
     // methods
-    void tick();	
+    virtual void tick();	
     // setters
     void setSampleRate(float sampleRate);
     void setAmp(double amp);
+    virtual void setFrequency(float frequency);
     virtual void setOscillatorAmp(int voice, double amp) = 0;
+    virtual void setRatio(int ratio);
+    virtual void setDepth(float depth);
     // getters
     virtual float getSample();
     float getPhase();
+    float getFrequency();
     double getAmp();
 };
 
