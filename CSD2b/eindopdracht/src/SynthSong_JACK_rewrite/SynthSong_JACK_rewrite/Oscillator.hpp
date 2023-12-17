@@ -13,18 +13,21 @@
 
 class Oscillator {
 public:
+    // constructor destructor
     Oscillator(float frequency = 440, float amplitude = 1, float samplerate = 44100);
     virtual ~Oscillator();
+    //methods
+    virtual void tick() = 0;
+    // setters
     void setSamplerate(float samplerate);
     void setFrequency(float frequency);
     void setAmplitude(float amplitude);
+    // getters
     double getFrequency();
     double getAmplitude();
     float getSample();
     float getPhase();
-    virtual void tick() = 0;
-    bool nextCycle;
-
+    
 protected:
     const float pi = acos (-1);  //atan(1) * 4; <-- vak van Pieter.
     float frequency;

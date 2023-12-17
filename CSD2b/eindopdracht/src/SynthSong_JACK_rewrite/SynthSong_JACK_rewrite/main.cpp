@@ -18,12 +18,12 @@ class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
-        oscillator->setSamplerate(samplerate);
+        synth->setSampleRate(samplerate);
     }
     
     ~CustomCallback(){
         AudioCallback::~AudioCallback();
-        delete oscillator;
+        delete synth;
     }
 
     // audio callback function
@@ -35,17 +35,14 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = oscillator->getSample();
-            
+            float sample = synth->getSample();
+               
             buffer.outputChannels[0][i] = sample;
             
-            if (oscillator->nextCycle) ++phaseCycle;
-            oscillator->nextCycle = false;
-            
             // write to text file
-            outfile << oscillator->getPhase() + phaseCycle << ":" << sample << std::endl;
+            outfile << synth->getPhase() + phaseCycle << ":" << sample << std::endl;
             
-            oscillator->tick();
+            synth->tick();
         }
         // close text file
         outfile.close();
@@ -53,7 +50,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Oscillator * oscillator = new Sine(440, 1, samplerate);
+    Synth * synth = new Synth;
 };
 
 // ================================================================================
@@ -62,9 +59,6 @@ int main() {
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
     jackModule.init (0, 1);
-    
-    Synth * synth = new Synth();
-    delete synth;
     
     // clear plot file
     std::ofstream ofs;
