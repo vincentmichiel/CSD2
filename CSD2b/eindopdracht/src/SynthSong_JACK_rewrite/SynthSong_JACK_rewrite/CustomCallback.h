@@ -14,25 +14,27 @@
 #include "AnalogSynth.hpp"
 #include "FMSynth.hpp"
 #include<iostream>
+#include <vector>
 
 class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
-        synth->setSampleRate(samplerate);
-        synth->setAmp(0.0);
         
-        synth->setOscillatorAmp(0, 1.0);
-        synth->setOscillatorAmp(1, 0.3);
-        synth->setOscillatorAmp(2, 0.1);
+        synths.push_back(std::make_unique<AnalogSynth>());
+        synths.push_back(std::make_unique<FMSynth>());
         
+        for(int i = 0; i < 2; i++){
+            synths[i]->setSampleRate(samplerate);
+        }
         
-        fm->getSample();
+        synths[0]->setOscillatorAmp(0, 1.0);
+        synths[0]->setOscillatorAmp(1, 0.3);
+        synths[0]->setOscillatorAmp(2, 0.1);
     }
     
     ~CustomCallback(){
         AudioCallback::~AudioCallback();
-        delete synth;
     }
 
     // audio callback function
@@ -44,14 +46,16 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = synth->getSample();
+            float sample = synths[0]->getSample();
                
             buffer.outputChannels[0][i] = sample;
             
             // write to text file
-            outfile << synth->getPhase() + phaseCycle << ":" << sample << std::endl;
+            outfile << synths[1]->getPhase() + phaseCycle << ":" << sample << std::endl;
             
-            synth->tick();
+            for(int i = 0; i < 2; i++){
+                synths[i]->tick();
+            }
         }
         // close text file
         outfile.close();
@@ -59,8 +63,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Synth * synth = new AnalogSynth;
-    Synth * fm = new FMSynth;
+    std::vector<std::unique_ptr<Synth>> synths;
 };
 
 #endif /* CustomCallback_h */
