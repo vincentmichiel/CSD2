@@ -33,10 +33,11 @@ public:
     // setters
     void setSampleRate(float sampleRate);
     void setAmp(double amp);
+    virtual void setOscillatorAmp(int voice, double amp) = 0;
     // getters
     virtual float getSample();
     float getPhase();
-    virtual void setOscillatorAmp(int voice, double amp) = 0;
+    double getAmp();
 };
 
 #endif /* Synth_hpp */

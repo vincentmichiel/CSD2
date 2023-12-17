@@ -36,7 +36,7 @@ float AnalogSynth::getSample(){
         sample += oscillators[i]->getSample();
     }
     sample /= voices;
-    return sample;
+    return sample * this->amp;
 }
 
 void AnalogSynth::setOscillatorAmp(int voice, double newAmp){

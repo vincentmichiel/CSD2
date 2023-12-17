@@ -40,11 +40,15 @@ void Synth::setAmp(double amp){
 };
 
 float Synth::getSample(){
-    return oscillators[0]->getSample();
+    return oscillators[0]->getSample() * amp;
 }
 
 float Synth::getPhase(){
     return phase;
+}
+
+double Synth::getAmp(){
+    return amp;
 }
 
 void Synth::tick(){
