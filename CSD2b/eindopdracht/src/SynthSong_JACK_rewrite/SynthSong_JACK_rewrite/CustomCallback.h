@@ -26,11 +26,17 @@ public:
         
         for(int i = 0; i < 2; i++){
             synths[i]->setSampleRate(samplerate);
+            synths[i]->setFrequency(440);
         }
         
+        // analog
         synths[0]->setOscillatorAmp(0, 1.0);
         synths[0]->setOscillatorAmp(1, 0.3);
         synths[0]->setOscillatorAmp(2, 0.1);
+        
+        // fm
+        synths[1]->setRatio(9);
+        synths[1]->setDepth(0.2);
     }
     
     ~CustomCallback(){
@@ -46,7 +52,7 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = synths[0]->getSample();
+            float sample = synths[1]->getSample();
                
             buffer.outputChannels[0][i] = sample;
             
