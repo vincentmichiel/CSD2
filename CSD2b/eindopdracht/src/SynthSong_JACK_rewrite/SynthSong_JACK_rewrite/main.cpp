@@ -1,64 +1,7 @@
-#include "jack_module.h"
-#include <cmath>
 #include <iostream>
 #include <fstream>
-#include "Oscillator.hpp"
-#include "Synth.hpp"
-#include "AnalogSynth.hpp"
+#include "CustomCallback.h"
 
-
-/*
- * NOTE: jack2 needs to be installed
- * jackd invokes the JACK audio server daemon
- * https://github.com/jackaudio/jackaudio.github.com/wiki/jackd(1)
- * on mac, you can start the jack audio server daemon in the terminal:
- * jackd -d coreaudio
- */
-
-class CustomCallback : public AudioCallback {
-public:
-    void prepare (int rate) override {
-        samplerate = (float) rate;
-        synth->setSampleRate(samplerate);
-        
-        synth->setOscillatorAmp(0, 1.0);
-        synth->setOscillatorAmp(1, 0.3);
-        synth->setOscillatorAmp(2, 0.1);
-    }
-    
-    ~CustomCallback(){
-        AudioCallback::~AudioCallback();
-        delete synth;
-    }
-
-    // audio callback function
-    void process (AudioBuffer buffer) override {
-        // open text file
-        std::ofstream outfile;
-        outfile.open("waveform.txt");
-        float phaseCycle = 0.0;
-        
-        for (int i = 0; i < buffer.numFrames; ++i) {
-            // calculate sample and write to audio buffer
-            float sample = synth->getSample();
-               
-            buffer.outputChannels[0][i] = sample;
-            
-            // write to text file
-            outfile << synth->getPhase() + phaseCycle << ":" << sample << std::endl;
-            
-            synth->tick();
-        }
-        // close text file
-        outfile.close();
-    }
-
-private:
-    float samplerate = 44100;
-    Synth * synth = new AnalogSynth;
-};
-
-// ================================================================================
 
 int main() {
     CustomCallback callback = CustomCallback {};
