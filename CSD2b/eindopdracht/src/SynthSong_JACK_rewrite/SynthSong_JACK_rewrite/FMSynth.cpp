@@ -8,17 +8,33 @@
 #include "FMSynth.hpp"
 
 FMSynth::FMSynth(double amp, int voices) : Synth(amp, voices){
-    
+    ratio = 1;
+    depth = 0.0;
+    oscillators[1]->setFrequency(frequency * ratio);
 }
 
 FMSynth::~FMSynth(){
     
 }
 
-float FMSynth::getSample(){
-   
+void FMSynth::setFrequency(float frequency){
+    oscillators[1]->setFrequency(frequency * ratio);
+    Synth::setFrequency(frequency);
+}
+
+void FMSynth::tick(){
+    oscillators[0]->setFrequency(frequency + oscillators[1]->getSample() * (depth * 15000));
     
-    return 0.0;
+    Synth::tick();
+}
+
+void FMSynth::setRatio(int ratio){
+    this->ratio = ratio;
+    oscillators[1]->setFrequency(frequency * ratio);
+}
+
+void FMSynth::setDepth(float depth){
+    this->depth = depth;
 }
 
 void FMSynth::setOscillatorAmp(int voice, double newAmp){
@@ -27,5 +43,17 @@ void FMSynth::setOscillatorAmp(int voice, double newAmp){
     } else {
         std::cout << "could not set new amplitude for oscillator: index out of bounds" << std::endl;
     }
+}
+
+float FMSynth::getSample(){
+    return oscillators[0]->getSample() * amp;
+}
+
+int FMSynth::getRatio(){
+    return ratio;
+}
+
+float FMSynth::getDepth(){
+    return depth;
 }
 
