@@ -15,25 +15,28 @@
 class Synth {
 private:
     float sampleRate;
-    double amp;
     float phase;
+    double midiNoteToFrequency(int midiNote);
+    
+protected:
+    double amp;
     int voices;
     // array of oscillators
     std::vector<std::unique_ptr<Oscillator>> oscillators;
-    double midiNoteToFrequency(int midiNote);
     
 public:
     // constructor destructor
     Synth(double amp = 1.0, int voices = 1);
-    ~Synth();
+    virtual ~Synth();
     // methods
-    void tick();
+    void tick();	
     // setters
     void setSampleRate(float sampleRate);
     void setAmp(double amp);
     // getters
-    float getSample();
+    virtual float getSample();
     float getPhase();
+    virtual void setOscillatorAmp(int voice, double amp) = 0;
 };
 
 #endif /* Synth_hpp */

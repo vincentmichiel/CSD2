@@ -6,10 +6,11 @@
 //
 
 #include "Synth.hpp"
-#include<iostream>
 #include "Oscillator.hpp"
 
 Synth::Synth(double amp, int voices) : amp(amp), voices(voices) {
+    this->amp = amp;
+    this->voices = voices;
     // create oscillators
     for (int i = 0; i < voices; i++) {
         oscillators.push_back(std::make_unique<Sine>());
@@ -17,7 +18,7 @@ Synth::Synth(double amp, int voices) : amp(amp), voices(voices) {
 };
 
 Synth::~Synth(){
-    std::cout << "synth removed" << std::endl;
+    
 }
 
 double Synth::midiNoteToFrequency(int midiNote){

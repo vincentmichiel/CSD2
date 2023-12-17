@@ -4,6 +4,7 @@
 #include <fstream>
 #include "Oscillator.hpp"
 #include "Synth.hpp"
+#include "AnalogSynth.hpp"
 
 
 /*
@@ -19,6 +20,10 @@ public:
     void prepare (int rate) override {
         samplerate = (float) rate;
         synth->setSampleRate(samplerate);
+        
+        synth->setOscillatorAmp(0, 1.0);
+        synth->setOscillatorAmp(1, 0.3);
+        synth->setOscillatorAmp(2, 0.1);
     }
     
     ~CustomCallback(){
@@ -50,7 +55,7 @@ public:
 
 private:
     float samplerate = 44100;
-    Synth * synth = new Synth;
+    Synth * synth = new AnalogSynth;
 };
 
 // ================================================================================
