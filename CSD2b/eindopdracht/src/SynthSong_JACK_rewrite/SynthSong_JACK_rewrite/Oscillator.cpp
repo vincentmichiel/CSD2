@@ -15,7 +15,7 @@ Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : fre
 }
 
 Oscillator::~Oscillator() {
-    std::cout << "oscillator removed" << std::endl;
+  
 }
 
 void Oscillator::setSamplerate(float samplerate){
@@ -30,6 +30,10 @@ void Oscillator::setFrequency(float frequency){
 
 void Oscillator::setAmplitude(float amplitude){
     this->amplitude = amplitude;
+}
+
+void Oscillator::setPhase(float phase){
+    this->phase = phase;
 }
 
 double Oscillator::getFrequency(){
@@ -56,10 +60,18 @@ void Oscillator::tick(){
     }
 }
 
+std::string Oscillator::getOscillatorType(){
+    return "default";
+}
+
 void Sine::tick(){
     Oscillator::tick();
     // calculate sample
     sample = sin(pi * 2 * phase) * amplitude;
+}
+
+std::string Sine::getOscillatorType(){
+    return "sine";
 }
 
 void Square::tick(){
@@ -68,9 +80,17 @@ void Square::tick(){
     sample = (sin(pi * 2 * phase) > 0 ? 1 : -1) * amplitude;
 }
 
+std::string Square::getOscillatorType(){
+    return "square";
+}
+
 void Triangle::tick() {
     Oscillator::tick();
     
     // Create a triangle wave using an absolute sawtooth
     sample = (-4.0f * abs(phase - 0.5f) + 1) * amplitude;
+}
+
+std::string Triangle::getOscillatorType(){
+    return "triangle";
 }
