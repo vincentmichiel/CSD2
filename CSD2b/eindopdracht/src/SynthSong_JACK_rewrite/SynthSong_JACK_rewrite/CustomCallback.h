@@ -12,16 +12,22 @@
 #include "Oscillator.hpp"
 #include "Synth.hpp"
 #include "AnalogSynth.hpp"
+#include "FMSynth.hpp"
+#include<iostream>
 
 class CustomCallback : public AudioCallback {
 public:
     void prepare (int rate) override {
         samplerate = (float) rate;
         synth->setSampleRate(samplerate);
+        synth->setAmp(0.0);
         
         synth->setOscillatorAmp(0, 1.0);
         synth->setOscillatorAmp(1, 0.3);
         synth->setOscillatorAmp(2, 0.1);
+        
+        
+        fm->getSample();
     }
     
     ~CustomCallback(){
@@ -54,6 +60,7 @@ public:
 private:
     float samplerate = 44100;
     Synth * synth = new AnalogSynth;
+    Synth * fm = new FMSynth;
 };
 
 #endif /* CustomCallback_h */
