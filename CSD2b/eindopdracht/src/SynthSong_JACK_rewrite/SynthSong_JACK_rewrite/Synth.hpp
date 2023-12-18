@@ -43,6 +43,7 @@ public:
     float getPhase();
     float getFrequency();
     double getAmp();
+    std::string getOscillatorType(int oscillator);
 };
 
 #endif /* Synth_hpp */

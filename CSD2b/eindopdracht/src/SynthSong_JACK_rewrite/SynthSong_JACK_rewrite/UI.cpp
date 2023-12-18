@@ -6,6 +6,7 @@
 //
 
 #include "UI.hpp"
+#include<iostream>
 
 std::string UI::retrieveUserInput(std::string selectionOptions[], int numOptions)
 {
@@ -28,7 +29,6 @@ int UI::retrieveUserSelection(std::string selectionOptions[], int numOptions)
     while(true) {
         // let user choose from the allowed options
         selection = retrieveUserInput(selectionOptions, numOptions);
-
         // check if the selection is among the available option
     for(int i=0; i<numOptions; ++i) {
         if(selection == selectionOptions[i]) {

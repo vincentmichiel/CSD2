@@ -15,12 +15,21 @@
 #include "FMSynth.hpp"
 #include<iostream>
 #include <vector>
+#include "UI.hpp"
 
 class CustomCallback : public AudioCallback {
 public:
+    std::vector<std::unique_ptr<Synth>> synths;
+    
+    void customInit(int synthSelection){
+        this->synthSelection = synthSelection;
+    }
+    
     void prepare (int rate) override {
+        // set values
         samplerate = (float) rate;
         
+        // create synths
         synths.push_back(std::make_unique<AnalogSynth>());
         synths.push_back(std::make_unique<FMSynth>());
         
@@ -35,7 +44,7 @@ public:
         synths[0]->setOscillatorAmp(2, 0.1);
         
         // fm
-        synths[1]->setRatio(9);
+        synths[1]->setRatio(2);
         synths[1]->setDepth(0.2);
     }
     
@@ -52,7 +61,7 @@ public:
         
         for (int i = 0; i < buffer.numFrames; ++i) {
             // calculate sample and write to audio buffer
-            float sample = synths[1]->getSample();
+            float sample = synths[synthSelection]->getSample();
                
             buffer.outputChannels[0][i] = sample;
             
@@ -69,7 +78,7 @@ public:
 
 private:
     float samplerate = 44100;
-    std::vector<std::unique_ptr<Synth>> synths;
+    int synthSelection;
 };
 
 #endif /* CustomCallback_h */

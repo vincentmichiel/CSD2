@@ -40,7 +40,12 @@ void Synth::setAmp(double amp){
 };
 
 void Synth::setFrequency(float frequency){
+    frequency = midiNoteToFrequency(frequency);
     this->frequency = frequency;
+    
+    for(int i = 0; i < voices; i++){
+        oscillators[i]->setFrequency(frequency);
+    }
 };
 
 void Synth::setRatio(int ratio){
@@ -65,6 +70,10 @@ double Synth::getAmp(){
 
 float Synth::getFrequency(){
     return frequency;
+}
+
+std::string Synth::getOscillatorType(int oscillator){
+    return oscillators[oscillator]->getOscillatorType();
 }
 
 void Synth::tick(){

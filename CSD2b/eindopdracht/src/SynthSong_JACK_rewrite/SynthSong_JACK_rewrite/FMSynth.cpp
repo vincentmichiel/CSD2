@@ -18,11 +18,12 @@ FMSynth::~FMSynth(){
 }
 
 void FMSynth::setFrequency(float frequency){
-    oscillators[1]->setFrequency(frequency * ratio);
     Synth::setFrequency(frequency);
+    oscillators[1]->setFrequency(oscillators[1]->getFrequency() * ratio);
 }
 
 void FMSynth::tick(){
+    // FM MAGIC
     oscillators[0]->setFrequency(frequency + oscillators[1]->getSample() * (depth * 15000));
     
     Synth::tick();
