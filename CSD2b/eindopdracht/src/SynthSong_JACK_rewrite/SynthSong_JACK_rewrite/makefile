@@ -4,10 +4,10 @@
 
 CC = g++
 CFLAGS = -Wall -std=c++17
-LDFLAGS=-ljack
+LDFLAGS=-ljack -lportmidi
 PROG = main
-SRC = main.cpp Oscillator.cpp Synth.cpp AnalogSynth.cpp FMSynth.cpp UI.cpp Melody.cpp
-OBJS = main.o Oscillator.o Synth.o AnalogSynth.o FMSynth.o UI.o Melody.o
+SRC = main.cpp Oscillator.cpp Synth.cpp AnalogSynth.cpp FMSynth.cpp UI.cpp Melody.cpp midi_io.cpp
+OBJS = main.o Oscillator.o Synth.o AnalogSynth.o FMSynth.o UI.o Melody.o midi_io.o
 
 $(PROG): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)

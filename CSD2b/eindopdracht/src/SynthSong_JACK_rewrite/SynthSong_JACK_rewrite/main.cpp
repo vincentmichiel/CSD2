@@ -4,6 +4,7 @@
 #include "UI.hpp"
 #include<thread>
 #include "Melody.hpp"
+#include "midi_io.h"
 
 int synthSelection;
 CustomCallback callback = CustomCallback {};
@@ -41,6 +42,10 @@ int main() {
     
     // play melody
     std::thread melodyThread(playMelody);
+    
+    // MIDI test
+    MIDI_io midi_io;
+    
     
 
     bool running = true;
