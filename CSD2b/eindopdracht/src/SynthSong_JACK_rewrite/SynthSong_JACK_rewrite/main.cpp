@@ -8,6 +8,7 @@
 
 int synthSelection;
 CustomCallback callback = CustomCallback {};
+MIDI_io midi_io;
 
 void playMelody(){
     Melody melody;
@@ -21,13 +22,41 @@ void playMelody(){
         callback.synths[synthSelection]->setFrequency(note);
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(dur)));
     }
-};
+}
+
+void readMidi(){
+    PmEvent event;
+    bool event_read;
+    unsigned char cmd,channel,data1;
+    
+    while(true) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(1)));
+        event_read = midi_io.read_event(event);
+        // midi available
+        if(event_read){
+            cmd=Pm_MessageStatus(event.message)&0xf0;
+            channel=Pm_MessageStatus(event.message)&0xf;
+            data1=Pm_MessageData1(event.message);
+            
+            // filter for note on and note off messages
+            if(cmd == 0x90 || cmd == 0x80) {
+                std::cout << (int) cmd << " " << (int) channel << " " << (int) data1 << std::endl;
+            }
+        }
+      } // while
+}
 
 int main() {
+    // clear plot file
+    std::ofstream ofs;
+    ofs.open("waveform.txt", std::ofstream::out | std::ofstream::trunc);
+    ofs.close();
+    
+    // init jack
     JackModule jackModule = JackModule { callback };
+    UI * ui = new UI;
     
     // user input
-    UI * ui = new UI;
     std::string synthTypes[2] = {"analog", "fm"};
     synthSelection = ui->retrieveUserSelection(synthTypes, 2);
     
@@ -35,18 +64,20 @@ int main() {
     callback.customInit(synthSelection);
     jackModule.init (0, 1);
     
-    // clear plot file
-    std::ofstream ofs;
-    ofs.open("waveform.txt", std::ofstream::out | std::ofstream::trunc);
-    ofs.close();
     
-    // play melody
-    std::thread melodyThread(playMelody);
+    // MIDI
+    midi_io.create_virtual_input_device("jacksynth");
+    int input_device = 0;
+    midi_io.list_devices();
+    std::cout << "\nGive input device number: ";
+    cin >> input_device;
+    midi_io.set_input_device(input_device);
+    midi_io.set_output_device(0);
+    midi_io.initialise();
+    midi_io.set_input_filter(0);
     
-    // MIDI test
-    MIDI_io midi_io;
-    
-    
+    // read midi in seperate thread
+    std::thread midiThread(readMidi);
 
     bool running = true;
     while (running) {
@@ -55,7 +86,9 @@ int main() {
                 running = false;
         }
     }
-    melodyThread.join();
+    // cleanup
+    midi_io.finalise();
+    midiThread.join();
     delete ui;
     return 0;
 }
