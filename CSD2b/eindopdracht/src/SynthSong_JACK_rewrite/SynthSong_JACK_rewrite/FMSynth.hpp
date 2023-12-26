@@ -16,7 +16,7 @@ private:
     int ratio;
     float depth;
 public:
-    FMSynth(double amp = 1.0, int voices = 2);
+    FMSynth(float frequency = 440, double amp = 1.0, int voices = 2);
     ~FMSynth();
     void tick() override;
     // setters

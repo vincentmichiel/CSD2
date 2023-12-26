@@ -27,7 +27,7 @@ protected:
     
 public:
     // constructor destructor
-    Synth(double amp = 1.0, int voices = 1);
+    Synth(float frequency = 440, double amp = 1.0, int voices = 1);
     virtual ~Synth();
     // methods
     virtual void tick();	
@@ -35,6 +35,7 @@ public:
     void setSampleRate(float sampleRate);
     void setAmp(double amp);
     virtual void setFrequency(float frequency);
+    void setNote(int note);
     virtual void setOscillatorAmp(int voice, double amp) = 0;
     virtual void setRatio(int ratio);
     virtual void setDepth(float depth);

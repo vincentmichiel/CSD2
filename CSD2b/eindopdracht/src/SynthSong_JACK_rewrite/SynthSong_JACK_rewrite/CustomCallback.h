@@ -35,13 +35,13 @@ public:
         
         for(int i = 0; i < 2; i++){
             synths[i]->setSampleRate(samplerate);
-            synths[i]->setFrequency(440);
+            synths[i]->setAmp(0.0);
         }
         
         // analog
-        synths[0]->setOscillatorAmp(0, 1.0);
+        synths[0]->setOscillatorAmp(0, 0.1);
         synths[0]->setOscillatorAmp(1, 0.3);
-        synths[0]->setOscillatorAmp(2, 0.1);
+        synths[0]->setOscillatorAmp(2, 0.9);
         
         // fm
         synths[1]->setRatio(2);
@@ -66,7 +66,7 @@ public:
             buffer.outputChannels[0][i] = sample;
             
             // write to text file
-            outfile << synths[1]->getPhase() + phaseCycle << ":" << sample << std::endl;
+            outfile << synths[synthSelection]->getPhase() + phaseCycle << ":" << sample << std::endl;
             
             for(int i = 0; i < 2; i++){
                 synths[i]->tick();

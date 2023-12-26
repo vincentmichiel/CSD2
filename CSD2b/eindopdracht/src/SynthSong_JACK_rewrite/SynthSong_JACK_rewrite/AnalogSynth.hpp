@@ -13,7 +13,7 @@
 
 class AnalogSynth : public Synth {
 public:
-    AnalogSynth(double amp = 1.0, int voices = 3);
+    AnalogSynth(float frequency = 440, double amp = 1.0, int voices = 3);
     ~AnalogSynth();
     // setters
     void setOscillatorAmp(int voice, double amp) override;

@@ -7,10 +7,10 @@
 
 #include "FMSynth.hpp"
 
-FMSynth::FMSynth(double amp, int voices) : Synth(amp, voices){
+FMSynth::FMSynth(float frequency, double amp, int voices) : Synth(frequency, amp, voices){
     ratio = 1;
     depth = 0.0;
-    oscillators[1]->setFrequency(frequency * ratio);
+    setFrequency(frequency);
 }
 
 FMSynth::~FMSynth(){

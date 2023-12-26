@@ -9,7 +9,7 @@
 #include<cmath>
 #include<iostream>
 
-AnalogSynth::AnalogSynth(double amp, int voices) : Synth(amp, voices) {
+AnalogSynth::AnalogSynth(float frequency, double amp, int voices) : Synth(frequency, amp, voices) {
     this->amp = amp;
     this->voices = voices;
     
@@ -40,8 +40,6 @@ float AnalogSynth::getSample(){
 }
 
 void AnalogSynth::setOscillatorAmp(int voice, double newAmp){
-    oscillators[0]->setFrequency(220);
-    oscillators[1]->setFrequency(400);
     if(voice >= 0 && voice < voices){
         oscillators[voice]->setAmplitude(newAmp);
     } else {

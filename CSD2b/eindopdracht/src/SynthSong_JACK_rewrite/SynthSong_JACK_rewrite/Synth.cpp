@@ -8,7 +8,7 @@
 #include "Synth.hpp"
 #include "Oscillator.hpp"
 
-Synth::Synth(double amp, int voices) : amp(amp), voices(voices) {
+Synth::Synth(float frequency, double amp, int voices) : amp(amp), frequency(frequency), voices(voices) {
     this->amp = amp;
     this->voices = voices;
     // create oscillators
@@ -40,13 +40,17 @@ void Synth::setAmp(double amp){
 };
 
 void Synth::setFrequency(float frequency){
-    frequency = midiNoteToFrequency(frequency);
     this->frequency = frequency;
     
     for(int i = 0; i < voices; i++){
         oscillators[i]->setFrequency(frequency);
     }
 };
+
+void Synth::setNote(int note){
+    frequency = midiNoteToFrequency(note);
+    setFrequency(frequency);
+}
 
 void Synth::setRatio(int ratio){
     
