@@ -10,24 +10,25 @@ int synthSelection;
 CustomCallback callback = CustomCallback {};
 MIDI_io midi_io;
 
-void playMelody(){
-    Melody melody;
-    float note;
-    float dur;
-    
-    while(true){
-        note = melody.getNote();
-        dur = melody.getDur();
-        
-        callback.synths[synthSelection]->setFrequency(note);
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(dur)));
-    }
-}
+//void playMelody(){
+//    Melody melody;
+//    float note;
+//    float dur;
+//    
+//    while(true){
+//        note = melody.getNote();
+//        dur = melody.getDur();
+//        
+//        callback.synths[synthSelection]->setFrequency(note);
+//        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(dur)));
+//    }
+//}
 
 void readMidi(){
     PmEvent event;
     bool event_read;
     unsigned char cmd,channel,data1;
+    int note;
     
     while(true) {
         std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long>(1)));
@@ -40,7 +41,17 @@ void readMidi(){
             
             // filter for note on and note off messages
             if(cmd == 0x90 || cmd == 0x80) {
-                std::cout << (int) cmd << " " << (int) channel << " " << (int) data1 << std::endl;
+                //std::cout << (int) cmd << " " << (int) channel << " " << (int) data1 << std::endl;
+                
+                if(int(cmd) == 144){
+                    // note on
+                    note = (int) data1;
+                    callback.synths[synthSelection]->setNote(note);
+                    callback.synths[synthSelection]->setAmp(1);
+                } else if ((int)cmd == 128){
+                    // note off
+                    callback.synths[synthSelection]->setAmp(0);
+                }
             }
         }
       } // while
@@ -59,7 +70,6 @@ int main() {
     // user input
     std::string synthTypes[2] = {"analog", "fm"};
     synthSelection = ui->retrieveUserSelection(synthTypes, 2);
-    
     
     callback.customInit(synthSelection);
     jackModule.init (0, 1);
