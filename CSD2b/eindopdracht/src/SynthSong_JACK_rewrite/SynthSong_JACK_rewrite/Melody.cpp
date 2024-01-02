@@ -22,6 +22,7 @@ float Melody::getNote()
   // wrap index back to the beginning
   if(noteIndex >= NUM_NOTES) {
     noteIndex = 0;
+      
   }
   // index++ --> use value, then increment
   return melody[noteIndex++];
