@@ -9,7 +9,6 @@
 #define CustomCallback_h
 
 #include "jack_module.h"
-#include <iostream>
 #include "Tremolo.hpp"
 #include "Delay.hpp"
 #include "Waveshaper.hpp"
@@ -21,7 +20,7 @@ public:
         samplerate = (float) rate;
         tremolo.setSampleRate(rate);
         delay.setFeedback(0.5f);
-        tremolo.setMix(0.0f);
+        waveshaper.setMix(0.0f);
     }
     
     ~CustomCallback(){
@@ -34,7 +33,7 @@ public:
         
         for (int channel = 0u; channel < numInputChannels; channel++) {
             for (int i = 0u; i < numFrames; i++) {
-                buffer.outputChannels[channel][i] = tremolo.process(delay.process(buffer.inputChannels[channel][i]));
+                buffer.outputChannels[channel][i] = delay.process(buffer.inputChannels[channel][i]);
                 
                 tremolo.tick();
                 delay.tick();
