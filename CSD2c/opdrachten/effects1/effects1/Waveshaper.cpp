@@ -7,8 +7,19 @@
 
 #include "Waveshaper.hpp"
 #include "Interpolate.hpp"
+#include <math.h>
+
+void Waveshaper::setRatio(float ratio){
+    this->ratio = ratio;
+}
 
 float Waveshaper::applyEffect(float sample){
     
-    return sample;
+    //       1
+    // (--------- ) * arctan(kx)
+    //   arctan(k)
+    
+    float output = (1.0f / atan(ratio)) * atan(ratio * sample);
+    
+    return output;
 }

@@ -13,8 +13,10 @@
 
 class Waveshaper : public Effect {
 public:
-    using Effect::Effect;
+    Waveshaper(float ratio = 2) : Effect(), ratio(ratio){};
+    void setRatio(float ratio);
 private:
+    float ratio;
     float applyEffect(float sample) override;
 };
 
