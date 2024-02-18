@@ -9,13 +9,13 @@
 #include <iostream>
 
 Oscillator::Oscillator(float frequency, float amplitude, float samplerate) : frequency(frequency),
-  amplitude(amplitude), phase(0), sample(0), samplerate(samplerate)
+amplitude(amplitude), phase(0), sample(0), samplerate(samplerate)
 {
     sampleDuration = frequency / samplerate;
 }
 
 Oscillator::~Oscillator() {
-  
+    
 }
 
 void Oscillator::setSamplerate(float samplerate){
@@ -84,13 +84,32 @@ std::string Square::getOscillatorType(){
     return "square";
 }
 
-void Triangle::tick() {
+void Saw::tick() {
     Oscillator::tick();
     
-    // Create a triangle wave using an absolute sawtooth
-    sample = (-4.0f * abs(phase - 0.5f) + 1) * amplitude;
+    //add 0.5 to phase, to allow a regular sawwave
+    
+    wPhase = phase + 0.5;
+    //we want values between: [0.0, 1.0], so wrap it
+    if(wPhase > 1) wPhase -= 1.0;
+    
+    //calculate the pure sawwave
+    sample = wPhase * 2.0 - 1.0;
+    
+    //we want to apply smoothing to prevent aliasing
+    //using Polynomial to smooth the corners of the sawwave
+    if(wPhase < phaseIncrement) {
+        smoothY = wPhase / phaseIncrement;
+        smoothY = smoothY + smoothY - smoothY * smoothY - 1.0;
+    } else if (wPhase > 1.0 - phaseIncrement) {
+        smoothY = (wPhase - 1.0) / phaseIncrement;
+        smoothY = smoothY + smoothY + smoothY * smoothY + 1.0;
+    } else {
+        smoothY = 0;
+    }
+    sample -= smoothY;
 }
 
-std::string Triangle::getOscillatorType(){
-    return "triangle";
+std::string Saw::getOscillatorType(){
+    return "saw";
 }

@@ -12,6 +12,8 @@
 #include <math.h>
 #include <iostream>
 
+#define SAW_SMOOTH_FACTOR 5.0f
+
 class Oscillator {
 public:
     // constructor destructor
@@ -58,11 +60,20 @@ public:
     std::string getOscillatorType() override;
 };
 
-class Triangle : public Oscillator {
+class Saw : public Oscillator {
 public:
     void tick() override;
-    using Oscillator::Oscillator;
+    Saw(float frequency = 440, float amplitude = 1, float samplerate = 44100) : Oscillator(frequency, amplitude, samplerate), phaseIncrement(frequency / samplerate * SAW_SMOOTH_FACTOR),
+    smoothY(0){};
     std::string getOscillatorType() override;
+private:
+    // ---- values used to calculate the saw wave ----
+    //phase increment
+    const float phaseIncrement;
+    // value used for smoothing the transition from -1 to 1
+    float smoothY;
+    //wrapped phase
+    float wPhase;
 };
 
 
