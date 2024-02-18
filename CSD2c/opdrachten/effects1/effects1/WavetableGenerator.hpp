@@ -23,6 +23,7 @@ public:
   };
   static void generateWaveform(float* buffer, int numFrames,
     WaveformType waveformType);
+    static void generateWaveform(float* buffer, int numFrames, float drive);
 
 private:
   // hide default constructor

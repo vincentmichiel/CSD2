@@ -6,6 +6,8 @@
 //
 
 #include "WavetableGenerator.hpp"
+#include "Waveshaper.hpp"
+#include "Interpolate.hpp"
 
 void WavetableGenerator::generateWaveform(float* buffer, int numFrames,
                                           WaveformType waveformType) {
@@ -38,7 +40,14 @@ void WavetableGenerator::generateWaveform(float* buffer, int numFrames,
         buffer[i] = osc->getSample();
         osc->tick();
     }
+    
     // release dynamically allocated oscillator object
     delete osc;
     osc = nullptr;
+}
+
+void WavetableGenerator::generateWaveform(float* buffer, int numFrames, float drive) {
+    for(int i = 0; i < BUFFER_SIZE; i++){
+        buffer[i] = (1.0f / atan(drive)) * atan(drive * Interpolate::mapInRange(i, 0, BUFFER_SIZE, -1, 1));
+    }
 }
