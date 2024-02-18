@@ -11,12 +11,15 @@
 #include <stdio.h>
 #include "Effect.hpp"
 
+#define BUFFER_SIZE 1024
+
 class Waveshaper : public Effect {
 public:
-    Waveshaper(float ratio = 2) : Effect(), ratio(ratio){};
-    void setRatio(float ratio);
+    Waveshaper(float drive = 2) : Effect(), drive(drive){};
+    void setDrive(float ratio);
 private:
-    float ratio;
+    float wavetable[BUFFER_SIZE];
+    float drive;
     float applyEffect(float sample) override;
 };
 
