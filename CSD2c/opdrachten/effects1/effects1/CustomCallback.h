@@ -12,6 +12,7 @@
 #include "Tremolo.hpp"
 #include "Delay.hpp"
 #include "Waveshaper.hpp"
+#include "Oscillator.hpp"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -20,7 +21,6 @@ public:
         samplerate = (float) rate;
         tremolo.setSampleRate(rate);
         delay.setFeedback(0.5f);
-        waveshaper.setMix(0.0f);
     }
     
     ~CustomCallback(){
@@ -33,7 +33,7 @@ public:
         
         for (int channel = 0u; channel < numInputChannels; channel++) {
             for (int i = 0u; i < numFrames; i++) {
-                buffer.outputChannels[channel][i] = delay.process(buffer.inputChannels[channel][i]);
+                buffer.outputChannels[channel][i] = waveshaper.process(buffer.inputChannels[channel][i]);
                 
                 tremolo.tick();
                 delay.tick();
@@ -50,7 +50,7 @@ private:
     Delay delay = Delay(samplerate, samplerate/2.0f);
     
     // Waveshaper
-    Waveshaper waveshaper;
+    Waveshaper waveshaper = Waveshaper(50.0f);
 };
 
 #endif /* CustomCallback_h */
