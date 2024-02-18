@@ -15,8 +15,9 @@
 
 class Waveshaper : public Effect {
 public:
-    Waveshaper(float drive = 2) : Effect(), drive(drive){};
+    Waveshaper(float drive = 2);
     void setDrive(float ratio);
+    void plot();
 private:
     float wavetable[BUFFER_SIZE];
     float drive;
