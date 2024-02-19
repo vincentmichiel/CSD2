@@ -19,12 +19,33 @@ public:
     void prepare (int rate) override {
         // set values
         samplerate = (float) rate;
-        tremolo.setSampleRate(rate);
-        delay.setFeedback(0.5f);
+        tremolo->setSampleRate(rate);
+        
+    }
+    
+    void setEffects(bool enableTremolo, bool enableDelay, bool enableWaveshaper, float tremoloMix, float delayMix, float waveshaperMix, float tremoloFrequency, float tremoloDepth, float delaySeconds, float delayFeedback, float waveshaperDrive){
+        // tremolo
+        tremolo = new Tremolo(samplerate, tremoloDepth, tremoloFrequency);
+        tremolo->setMix(tremoloMix);
+        tremolo->setBypass(!enableTremolo);
+        
+        // delay
+        delay = new Delay(samplerate * delaySeconds, samplerate * delaySeconds);
+        delay->setFeedback(delaySeconds);
+        delay->setMix(delayMix);
+        delay->setBypass(!enableDelay);
+        
+        // waveshaper
+        waveshaper = new Waveshaper(waveshaperDrive);
+        waveshaper->setMix(waveshaperMix);
+        waveshaper->setBypass(!enableWaveshaper);
     }
     
     ~CustomCallback(){
         AudioCallback::~AudioCallback();
+        delete tremolo;
+        delete delay;
+        delete waveshaper;
     }
     
     // audio callback function
@@ -33,24 +54,20 @@ public:
         
         for (int channel = 0u; channel < numInputChannels; channel++) {
             for (int i = 0u; i < numFrames; i++) {
-                buffer.outputChannels[channel][i] = waveshaper.process(buffer.inputChannels[channel][i]);
+                buffer.outputChannels[channel][i] = tremolo->process(delay->process(waveshaper->process(buffer.inputChannels[channel][i])));
                 
-                tremolo.tick();
-                delay.tick();
+                tremolo->tick();
+                delay->tick();
             }
         }
     }
     
 private:
     float samplerate = 44100;
-    // 5hz tremolo
-    Tremolo tremolo = Tremolo(samplerate, 1.0f, 5.0f);
     
-    // 0.5s delay
-    Delay delay = Delay(samplerate, samplerate/2.0f);
-    
-    // Waveshaper
-    Waveshaper waveshaper = Waveshaper(50.0f);
+    Tremolo * tremolo;
+    Delay * delay;
+    Waveshaper * waveshaper;
 };
 
 #endif /* CustomCallback_h */
