@@ -9,5 +9,12 @@
 #define UI_hpp
 
 #include <stdio.h>
+#include <string>
+
+class UI {
+public:
+    bool getYesNo(std::string input);
+    float getFloat(std::string input, float min, float max);
+};
 
 #endif /* UI_hpp */
