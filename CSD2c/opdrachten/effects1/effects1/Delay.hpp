@@ -23,6 +23,7 @@ public:
         circBuffer.resetSize(size);
         circBuffer.setDistanceRW(distance);
         }
+    ~Delay();
     void setFeedback(float feedback);
     uint getSize();
     uint getDistance();

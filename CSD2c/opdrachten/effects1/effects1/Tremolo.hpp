@@ -24,6 +24,7 @@ public:
         LFO.setFrequency(frequency);
         LFO.setSamplerate(sampleRate);
         }
+    ~Tremolo();
     
     void tick();
     void setSampleRate(float sampleRate);

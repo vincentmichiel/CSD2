@@ -7,6 +7,10 @@
 
 #include "Delay.hpp"
 
+Delay::~Delay(){
+    Effect::~Effect();
+};
+
 void Delay::setFeedback(float feedback){
     this->feedback = feedback;
 }

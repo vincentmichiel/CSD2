@@ -11,6 +11,10 @@
 #include <iostream>
 #include <fstream>
 
+Waveshaper::~Waveshaper(){
+    Effect::~Effect();
+};
+
 Waveshaper::Waveshaper(float drive) : Effect(), drive(drive) {
     WavetableGenerator::generateWaveform(wavetable, BUFFER_SIZE, drive);
 }

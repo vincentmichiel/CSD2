@@ -9,6 +9,10 @@
 #include "Oscillator.hpp"
 #include <iostream>
 
+Tremolo::~Tremolo(){
+    Effect::~Effect();
+};
+
 void Tremolo::setSampleRate(float sampleRate){
     LFO.setSamplerate(sampleRate);
 }

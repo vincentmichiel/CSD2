@@ -16,6 +16,7 @@
 class Waveshaper : public Effect {
 public:
     Waveshaper(float drive = 2);
+    ~Waveshaper();
     void setDrive(float ratio);
     void plot();
 private:
