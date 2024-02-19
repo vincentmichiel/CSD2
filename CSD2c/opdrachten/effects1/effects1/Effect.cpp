@@ -9,7 +9,13 @@
 #include <iostream>
 
 Effect::Effect(float mix) : mix(mix){
-    
+    bypass = false;
+}
+
+Effect::~Effect(){};
+
+void Effect::setBypass(bool bypass){
+    this->bypass = bypass;
 }
 
 void Effect::setMix(float mix){
@@ -17,6 +23,11 @@ void Effect::setMix(float mix){
 }
 
 float Effect::process(float sample){
+    // bypass
+    if(bypass){
+        return sample;
+    }
+    
     // process
     float output = applyEffect(sample);
     
