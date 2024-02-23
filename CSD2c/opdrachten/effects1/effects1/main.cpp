@@ -13,7 +13,6 @@
 #define BYPASS_AUDIO_LOOP 0
 
 int main(int argc, const char * argv[]) {
-    UI ui;
     // init audio
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
@@ -31,29 +30,29 @@ int main(int argc, const char * argv[]) {
     float delayFeedback = 0.0f;
     float waveshaperDrive = 0.0f;
     
-    enableTremolo = ui.getYesNo("Enable tremolo?");
+    enableTremolo = UI::getYesNo("Enable tremolo?");
     if(enableTremolo){
-        tremoloMix = ui.getFloat("Set the tremolo mix: ", 0.0f, 1.0f);
-        tremoloFrequency = ui.getFloat("Set the tremolo frequency: ", 0.1f, 100.0f);
-        tremoloDepth = ui.getFloat("Set the tremolo depth: ", 0.0f, 1.0f);
+        tremoloMix = UI::getFloat("Set the tremolo mix: ", 0.0f, 1.0f);
+        tremoloFrequency = UI::getFloat("Set the tremolo frequency: ", 0.1f, 100.0f);
+        tremoloDepth = UI::getFloat("Set the tremolo depth: ", 0.0f, 1.0f);
     }
     
-    enableDelay = ui.getYesNo("Enable delay?");
+    enableDelay = UI::getYesNo("Enable delay?");
     if(enableDelay){
-        delayMix = ui.getFloat("Set the delay mix: ", 0.0f, 1.0f);
-        delaySeconds = ui.getFloat("How many seconds delay?", 0.1, 10.0f);
-        delayFeedback = ui.getFloat("Set delay feedback: ", 0.0f, 0.99f);
+        delayMix = UI::getFloat("Set the delay mix: ", 0.0f, 1.0f);
+        delaySeconds = UI::getFloat("How many seconds delay?", 0.1, 10.0f);
+        delayFeedback = UI::getFloat("Set delay feedback: ", 0.0f, 0.99f);
     }
     
-    enableWaveshaper = ui.getYesNo("Enable waveshaper?");
+    enableWaveshaper = UI::getYesNo("Enable waveshaper?");
     if(enableWaveshaper){
-        waveshaperMix = ui.getFloat("Set the waveshaper mix: ", 0.0f, 1.0f);
-        waveshaperDrive = ui.getFloat("Set the waveshaper drive: ", 0.0f, 50.0f);
+        waveshaperMix = UI::getFloat("Set the waveshaper mix: ", 0.0f, 1.0f);
+        waveshaperDrive = UI::getFloat("Set the waveshaper drive: ", 0.0f, 50.0f);
     }
     
     callback.setEffects(enableTremolo, enableDelay, enableWaveshaper, tremoloMix, delayMix, waveshaperMix, tremoloFrequency, tremoloDepth, delaySeconds, delayFeedback, waveshaperDrive);
     
-    jackModule.init(1, 1);
+    jackModule.init(1, 2);
     
     bool running = true;
     while (running) {

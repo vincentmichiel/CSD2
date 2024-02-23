@@ -13,8 +13,8 @@
 
 class UI {
 public:
-    bool getYesNo(std::string input);
-    float getFloat(std::string input, float min, float max);
+    static bool getYesNo(std::string input);
+    static float getFloat(std::string input, float min, float max);
 };
 
 #endif /* UI_hpp */
