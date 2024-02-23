@@ -52,9 +52,10 @@ public:
     void process (AudioBuffer buffer) override {
         auto [inputChannels, outputChannels, numInputChannels, numOutputChannels, numFrames] = buffer;
         
-        for (int channel = 0u; channel < numInputChannels; channel++) {
+        for (int channel = 0u; channel < numOutputChannels; channel++) {
             for (int i = 0u; i < numFrames; i++) {
-                buffer.outputChannels[channel][i] = tremolo->process(delay->process(waveshaper->process(buffer.inputChannels[channel][i])));
+                buffer.outputChannels[channel][i] = oscillators[channel]->getSample();
+                oscillators[channel]->tick();
                 
                 tremolo->tick();
                 delay->tick();
@@ -64,6 +65,9 @@ public:
     
 private:
     float samplerate = 44100;
+    Sine sine1 = Sine(440, 1, samplerate);
+    Sine sine2 = Sine(770, 1, samplerate);
+    Sine * oscillators[2] = {&sine1, &sine2};
     
     Tremolo * tremolo;
     Delay * delay;
