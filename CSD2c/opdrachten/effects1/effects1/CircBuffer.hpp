@@ -56,8 +56,12 @@ private:
     }
     
     // wrap a head if necessary
-    inline void wrapH(uint& head) {
-        if (head >= m_size) head -= m_size;
+    inline void wrapH(int& head) {
+        if (head >= m_size) {
+            head -= m_size;
+        } else if (head < 0){
+            head += m_size;
+        }
     }
     
     // allocate and release methods, used to alter the buffer size
@@ -69,8 +73,8 @@ private:
     // buffer size
     uint m_size;
     // read and write heads, delay size
-    uint m_readH;
-    uint m_writeH;
+    int m_readH;
+    int m_writeH;
     uint m_distanceRW;
 };
 
