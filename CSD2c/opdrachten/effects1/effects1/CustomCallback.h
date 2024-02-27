@@ -58,7 +58,7 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = chorus->process(channel, saw1.getSample());
+                buffer.outputChannels[channel][i] = tremolo->process(chorus->process(saw1.getSample(), channel));
             }
             
             saw1.tick();
