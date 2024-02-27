@@ -30,31 +30,21 @@ float Effect::applyEffect(int channel, float sample){
     return sample;
 }
 
-float Effect::process(float sample){
+float Effect::process(float sample, int channel){
     // bypass
     if(bypass){
         return sample;
     }
-
-    // process
-    float output = applyEffect(sample);
     
-    // drywet
-    output *= mix;
-    output += sample * 1 - mix;
-    
-    // output
-    return output;
-}
+    float output;
 
-float Effect::process(int channel, float sample){
-    // bypass
-    if(bypass){
-        return sample;
+    if(channel == - 1){
+        // MONO
+        output = applyEffect(sample);
+    } else {
+        // STEREO
+        output = applyEffect(channel, sample);
     }
-
-    // process
-    float output = applyEffect(channel, sample);
     
     // drywet
     output *= mix;
