@@ -17,7 +17,7 @@ private:
     float depth;
     float frequency;
     Sine LFO;
-    float applyEffect(int channel, float sample) override;
+    float applyEffect(float sample) override;
     
 public:
     Tremolo(float sampleRate = 44100, float depth = 1, float frequency = 20) : Effect(), depth(depth), frequency(frequency), LFO() {
