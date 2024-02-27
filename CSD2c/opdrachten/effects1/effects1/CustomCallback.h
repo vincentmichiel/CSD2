@@ -8,10 +8,12 @@
 #ifndef CustomCallback_h
 #define CustomCallback_h
 
+#include <iostream>
 #include "jack_module.h"
 #include "Tremolo.hpp"
 #include "Delay.hpp"
 #include "Waveshaper.hpp"
+#include "StereoChorus.hpp"
 #include "Oscillator.hpp"
 
 class CustomCallback : public AudioCallback {
@@ -20,7 +22,8 @@ public:
         // set values
         samplerate = (float) rate;
         tremolo->setSampleRate(rate);
-        
+        chorus = new StereoChorus;
+        chorus->setMix(0.8);
     }
     
     void setEffects(bool enableTremolo, bool enableDelay, bool enableWaveshaper, float tremoloMix, float delayMix, float waveshaperMix, float tremoloFrequency, float tremoloDepth, float delaySeconds, float delayFeedback, float waveshaperDrive){
@@ -46,6 +49,7 @@ public:
         delete tremolo;
         delete delay;
         delete waveshaper;
+        delete chorus;
     }
     
     // audio callback function
@@ -54,24 +58,26 @@ public:
         
         for (int channel = 0u; channel < numOutputChannels; channel++) {
             for (int i = 0u; i < numFrames; i++) {
-                buffer.outputChannels[channel][i] = oscillators[channel]->getSample();
-                oscillators[channel]->tick();
                 
+                buffer.outputChannels[channel][i] = chorus->process(channel, saws[channel]->getSample());
+                
+                saws[channel]->tick();
                 tremolo->tick();
                 delay->tick();
+                chorus->tick(channel);
             }
         }
     }
     
 private:
     float samplerate = 44100;
-    Sine sine1 = Sine(440, 1, samplerate);
-    Sine sine2 = Sine(770, 1, samplerate);
-    Sine * oscillators[2] = {&sine1, &sine2};
-    
+    Saw sine1 = Saw(440, 1, samplerate);
+    Saw sine2 = Saw(440, 1, samplerate);
+    Saw * saws[2] = {&sine1, &sine2};
     Tremolo * tremolo;
     Delay * delay;
     Waveshaper * waveshaper;
+    StereoChorus * chorus;
 };
 
 #endif /* CustomCallback_h */
