@@ -56,24 +56,22 @@ public:
     void process (AudioBuffer buffer) override {
         auto [inputChannels, outputChannels, numInputChannels, numOutputChannels, numFrames] = buffer;
         
-        for (int channel = 0u; channel < numOutputChannels; channel++) {
-            for (int i = 0u; i < numFrames; i++) {
-                
-                buffer.outputChannels[channel][i] = chorus->process(channel, saws[channel]->getSample());
-                
-                saws[channel]->tick();
-                tremolo->tick();
-                delay->tick();
-                chorus->tick(channel);
+        for (int i = 0u; i < numFrames; i++) {
+            for (int channel = 0u; channel < numOutputChannels; channel++) {
+                buffer.outputChannels[channel][i] = chorus->process(channel, saw1.getSample());
             }
+            
+            saw1.tick();
+            tremolo->tick();
+            delay->tick();
+            chorus->tick();
         }
+        
     }
     
 private:
     float samplerate = 44100;
-    Saw sine1 = Saw(440, 1, samplerate);
-    Saw sine2 = Saw(440, 1, samplerate);
-    Saw * saws[2] = {&sine1, &sine2};
+    Saw saw1 = Saw(440, 1, samplerate);
     Tremolo * tremolo;
     Delay * delay;
     Waveshaper * waveshaper;
