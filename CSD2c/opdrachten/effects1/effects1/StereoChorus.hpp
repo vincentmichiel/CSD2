@@ -40,7 +40,7 @@ public:
         lfo[1]->setPhase(0.3);
         }
     ~StereoChorus();
-    void tick(int channel);
+    void tick();
     uint getSize();
     uint getDistance();
 };

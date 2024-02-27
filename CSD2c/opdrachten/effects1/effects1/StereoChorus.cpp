@@ -14,11 +14,13 @@ StereoChorus::~StereoChorus(){
     Effect::~Effect();
 }
 
-void StereoChorus::tick(int channel){
-    buffer[channel]->tick();
-    lfo[channel]->tick();
-    
-    buffer[channel]->setDistanceRW(delaySamples + (offsetSamples * lfo[channel]->getSample()));
+void StereoChorus::tick(){
+    for(int channel = 0; channel < 2; channel++){
+        buffer[channel]->tick();
+        lfo[channel]->tick();
+        
+        buffer[channel]->setDistanceRW(delaySamples + (offsetSamples * lfo[channel]->getSample()));
+    }
 }
 
 float StereoChorus::applyEffect(int channel, float sample){
