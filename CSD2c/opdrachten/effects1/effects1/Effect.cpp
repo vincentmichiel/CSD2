@@ -22,14 +22,14 @@ void Effect::setMix(float mix){
     this->mix = mix;
 }
 
-float Effect::process(float sample){
+float Effect::process(int channel, float sample){
     // bypass
     if(bypass){
         return sample;
     }
-    
+
     // process
-    float output = applyEffect(sample);
+    float output = applyEffect(channel, sample);
     
     // drywet
     output *= mix;

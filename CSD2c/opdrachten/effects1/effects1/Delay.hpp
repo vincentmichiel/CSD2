@@ -17,7 +17,7 @@ private:
     uint size, distance;
     float feedback;
     CircBuffer circBuffer;
-    float applyEffect(float sample) override;
+    float applyEffect(int channel, float sample) override;
 public:
     Delay(uint size = 1024, uint distance = 256, float feedback = 0) : Effect(), size(size), distance(distance), feedback(feedback), circBuffer() {
         circBuffer.resetSize(size);

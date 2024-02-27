@@ -31,7 +31,7 @@ void Delay::tick(){
     circBuffer.tick();
 }
 
-float Delay::applyEffect(float sample){
+float Delay::applyEffect(int channel, float sample){
     // read sample from delayline
     float delayedSample = circBuffer.read();
     

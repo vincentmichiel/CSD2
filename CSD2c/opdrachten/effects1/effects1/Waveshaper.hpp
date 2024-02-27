@@ -22,7 +22,7 @@ public:
 private:
     float wavetable[BUFFER_SIZE];
     float drive;
-    float applyEffect(float sample) override;
+    float applyEffect(int channel, float sample) override;
 };
 
 #endif /* Waveshaper_hpp */

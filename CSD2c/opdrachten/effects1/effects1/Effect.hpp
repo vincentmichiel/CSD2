@@ -21,8 +21,8 @@ public:
     void setMix(float mix);
     void setBypass(bool bypass);
     // methods
-    float process(float sample);
-    virtual float applyEffect(float sample) = 0;
+    float process(int channel, float sample);
+    virtual float applyEffect(int channel, float sample) = 0;
 };
 
 #endif /* Effect_hpp */

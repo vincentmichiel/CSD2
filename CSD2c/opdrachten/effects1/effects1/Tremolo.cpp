@@ -34,7 +34,7 @@ float Tremolo::getFrequency(){
     return frequency;
 }
 
-float Tremolo::applyEffect(float sample){
+float Tremolo::applyEffect(int channel, float sample){
     // transform sine in range [-1, 1] to range [0, 1]
     float modSignal = LFO.getSample() * 0.5 + 0.5;
     // apply modDept

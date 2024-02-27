@@ -24,7 +24,7 @@ void Waveshaper::setDrive(float drive){
     WavetableGenerator::generateWaveform(wavetable, BUFFER_SIZE, drive);
 }
 
-float Waveshaper::applyEffect(float sample){
+float Waveshaper::applyEffect(int channel, float sample){
     sample = Interpolate::mapInRange(sample, -1, 1, 0, BUFFER_SIZE - 1);
     // transform floating point index to integer index
     int i = (int) sample;
