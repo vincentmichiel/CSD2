@@ -15,6 +15,7 @@
 #include "Waveshaper.hpp"
 #include "StereoChorus.hpp"
 #include "Oscillator.hpp"
+#include "Filters.h"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -23,7 +24,10 @@ public:
         samplerate = (float) rate;
         tremolo->setSampleRate(rate);
         chorus = new StereoChorus;
-        chorus->setMix(0.8);
+        
+        filter->setBCoefficient(0.99);
+        filter->setA1Coefficient(0.2);
+        filter->setA2Coefficient(0.3);
     }
     
     void setEffects(bool enableTremolo, bool enableDelay, bool enableWaveshaper, float tremoloMix, float delayMix, float waveshaperMix, float tremoloFrequency, float tremoloDepth, float delaySeconds, float delayFeedback, float waveshaperDrive){
@@ -58,7 +62,7 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = tremolo->process(chorus->process(saw1.getSample(), channel));
+                buffer.outputChannels[channel][i] = filter->process(saw1.getSample());
             }
             
             saw1.tick();
@@ -76,6 +80,7 @@ private:
     Delay * delay;
     Waveshaper * waveshaper;
     StereoChorus * chorus;
+    HalfBiquad * filter = new HalfBiquad;
 };
 
 #endif /* CustomCallback_h */
