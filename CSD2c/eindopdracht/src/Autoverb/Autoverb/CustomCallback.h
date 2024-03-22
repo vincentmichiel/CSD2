@@ -31,8 +31,6 @@ public:
             for (int channel = 0u; channel < numOutputChannels; channel++) {
                 buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
             }
-            
-            multitap->tick();
         }
         
     }
