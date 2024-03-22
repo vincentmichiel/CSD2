@@ -18,6 +18,7 @@ public:
     
     CircBuffer();
     CircBuffer(uint size, uint distanceRW);
+    CircBuffer(uint size, uint * distances, uint tapAmount);
     ~CircBuffer();
     
     // resets the size of the buffer
@@ -25,15 +26,32 @@ public:
     
     // setter and getter for the distance between read and write head
     void setDistanceRW(uint distanceRW);
+    void setDistances(uint * distances);
+    void setTapAmount(uint tapAmount);
     uint getDistanceRW();
     // write and read values at write / read head
     inline void write(float val) { m_buffer[m_writeH] = val; }
     inline float read() { return m_buffer[m_readH]; }
     
+    inline float readTaps() {
+        float output = 0;
+        for(int i = 0; i < tapAmount; i++){
+            output += m_buffer[readHeads[i]];
+        }
+        return output / tapAmount;
+    }
+    
     // method to set a step in time --> move to next sample
     inline void tick() {
         incrWriteH();
         incrReadH();
+        
+        if(tapAmount > 0){
+            for(int i = 0; i < tapAmount; i++){
+                readHeads[i]++;
+                wrapH(readHeads[i]);
+            }
+        }
     }
     
     // debug methods
@@ -76,6 +94,9 @@ private:
     int m_readH;
     int m_writeH;
     uint m_distanceRW;
+    uint tapAmount;
+    uint * distances;
+    int * readHeads;
 };
 
 #endif /* CircBuffer_hpp */

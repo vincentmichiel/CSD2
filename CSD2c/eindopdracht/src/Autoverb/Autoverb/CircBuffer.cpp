@@ -9,7 +9,9 @@
 #include <iostream>
 #include <cstring>
 
-CircBuffer::CircBuffer() : CircBuffer(0, 256) {}
+CircBuffer::CircBuffer() : CircBuffer(0, 256) {
+    tapAmount = 0;
+}
 
 CircBuffer::CircBuffer(uint size, uint distanceRW) : m_size(size),
 m_readH(0), m_writeH(0)
@@ -21,6 +23,14 @@ m_readH(0), m_writeH(0)
     memset(m_buffer, 0, m_size * sizeof(float));
 }
 
+CircBuffer::CircBuffer(uint size, uint * distances, uint tapAmount) : m_size(size),
+m_readH(0), m_writeH(0), tapAmount(tapAmount)
+{
+    allocateBuffer();
+    
+    // fill buffer
+    memset(m_buffer, 0, m_size * sizeof(float));
+}
 
 CircBuffer::~CircBuffer()
 {
@@ -32,6 +42,10 @@ void CircBuffer::resetSize(uint size)
     m_size = size;
     releaseBuffer();
     allocateBuffer();
+}
+
+void CircBuffer::setTapAmount(uint tapAmount){
+    this->tapAmount = tapAmount;
 }
 
 void CircBuffer::allocateBuffer()
@@ -53,6 +67,19 @@ void CircBuffer::setDistanceRW(uint distanceRW)
     m_distanceRW = distanceRW;
     m_readH = m_writeH - m_distanceRW + m_size;
     wrapH(m_readH);
+}
+
+void CircBuffer::setDistances(uint * distances)
+{
+    // store new distance between R & W heads and update rhead position
+    this->distances = distances;
+    readHeads = new int[tapAmount];
+    
+    for(int i = 0; i < tapAmount; i++){
+        readHeads[i] = m_writeH - distances[i] + m_size;
+        std::cout << i << std::endl;
+        wrapH(readHeads[i]);
+    }
 }
 
 uint CircBuffer::getDistanceRW() {
