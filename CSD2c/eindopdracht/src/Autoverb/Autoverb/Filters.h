@@ -26,6 +26,10 @@ struct IIRFilter : Filter {
         // Do not exceed 1, for the safety of all our ears
         a = coefficient;
     }
+    
+    void clear(){
+        feedback = 0.0;
+    }
 
 private:
     double feedback { 0.0 };

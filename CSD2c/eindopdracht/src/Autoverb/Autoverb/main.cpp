@@ -6,13 +6,53 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include "CustomCallback.h"
+#include "Filters.h"
+
+#define BYPASS_AUDIO_LOOP 1
 
 int main(int argc, const char * argv[]) {
     // init audio
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
     
+#if BYPASS_AUDIO_LOOP
+    IIRFilter filter;
+    filter.setCoefficient(0.5);
+    
+    
+    float samplerate = 44100;
+    double freq = 0;
+    double x;
+    double max = 0;
+    
+    // plot
+    // clear plot file
+    std::ofstream ofs;
+    ofs.open("waveform.txt", std::ofstream::out | std::ofstream::trunc);
+    
+    for(int j = 0; j < 0.5 * samplerate; j++){
+        filter.clear();
+        freq = j;
+        max = 0;
+        
+        for(int i = 0; i < 0.5 * samplerate; i++){
+            x = sin(freq * (2 * M_PI) * i / samplerate);
+            x = filter.process(x);
+            x = abs(x);
+            
+            if(x > max){
+                max = x;
+            }
+        }
+        // write to text file
+        ofs << j << ":" << max << std::endl;
+    }
+    
+    ofs.close();
+    
+#else
     
     jackModule.init(1, 2);
     
@@ -23,5 +63,7 @@ int main(int argc, const char * argv[]) {
                 running = false;
         }
     }
+    
+#endif
     return 0;
 }
