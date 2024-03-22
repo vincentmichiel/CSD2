@@ -18,8 +18,12 @@ int main(int argc, const char * argv[]) {
     JackModule jackModule = JackModule { callback };
     
 #if BYPASS_AUDIO_LOOP
-    IIRFilter filter;
-    filter.setCoefficient(0.5);
+    Biquad filter;
+    filter.setCoefficients(0.8738265605660307,
+                           -1.7476531211320614,
+                           0.8738265605660307,
+                           -1.7444563651686795,
+                           0.7508498770954435);
     
     
     float samplerate = 44100;
@@ -37,7 +41,7 @@ int main(int argc, const char * argv[]) {
         freq = j;
         max = 0;
         
-        for(int i = 0; i < 0.5 * samplerate; i++){
+        for(int i = 0; i < 0.25 * samplerate; i++){
             x = sin(freq * (2 * M_PI) * i / samplerate);
             x = filter.process(x);
             x = abs(x);

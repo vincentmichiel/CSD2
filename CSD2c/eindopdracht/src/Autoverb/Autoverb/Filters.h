@@ -27,9 +27,6 @@ struct IIRFilter : Filter {
         a = coefficient;
     }
     
-    void clear(){
-        feedback = 0.0;
-    }
 
 private:
     double feedback { 0.0 };
