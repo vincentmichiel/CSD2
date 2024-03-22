@@ -33,12 +33,8 @@ public:
     inline void write(float val) { m_buffer[m_writeH] = val; }
     inline float read() { return m_buffer[m_readH]; }
     
-    inline float readTaps() {
-        float output = 0;
-        for(int i = 0; i < tapAmount; i++){
-            output += m_buffer[readHeads[i]];
-        }
-        return output / tapAmount;
+    inline float readTap(uint tap) {
+        return m_buffer[readHeads[tap]];
     }
     
     // method to set a step in time --> move to next sample

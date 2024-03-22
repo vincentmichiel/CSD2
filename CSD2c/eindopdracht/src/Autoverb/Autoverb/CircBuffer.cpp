@@ -77,7 +77,6 @@ void CircBuffer::setDistances(uint * distances)
     
     for(int i = 0; i < tapAmount; i++){
         readHeads[i] = m_writeH - distances[i] + m_size;
-        std::cout << i << std::endl;
         wrapH(readHeads[i]);
     }
 }

@@ -15,13 +15,13 @@
 
 class MultitapDelay : public Effect {
 private:
-    uint size;
+    uint size, tapAmount;
     CircBuffer circBuffer;
-    float applyEffect(float sample) override;
+    float applyEffect(int channel, float sample) override;
     uint * distances;
     
 public:
-    MultitapDelay(float samplerate, uint size, uint * distances, uint tapAmount) : Effect(), size(size), circBuffer(), distances(distances) {
+    MultitapDelay(float samplerate, uint size, uint * distances, uint tapAmount) : Effect(), size(size), tapAmount(tapAmount), circBuffer(), distances(distances) {
         circBuffer.resetSize(size * samplerate / 1000.0);
         for(int i = 0; i < tapAmount; i++){
             distances[i] = distances[i] * samplerate / 1000.0;

@@ -20,7 +20,6 @@ public:
     }
     
     ~CustomCallback(){
-        delete multitap;
         AudioCallback::~AudioCallback();
     }
     
@@ -30,7 +29,7 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = multitap->process(buffer.inputChannels[0][i]);
+                buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
             }
             
             multitap->tick();
@@ -40,8 +39,6 @@ public:
     
 private:
     float samplerate = 44100;
-    uint taps[3] = {500, 600, 999};
-    MultitapDelay * multitap = new MultitapDelay(samplerate, 1000, taps, 3);
 };
 
 #endif /* CustomCallback_h */

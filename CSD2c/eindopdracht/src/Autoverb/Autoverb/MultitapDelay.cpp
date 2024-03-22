@@ -6,6 +6,7 @@
 //
 
 #include "MultitapDelay.hpp"
+#include <iostream>
 
 MultitapDelay::~MultitapDelay(){
     Effect::~Effect();
@@ -23,13 +24,18 @@ void MultitapDelay::tick(){
     circBuffer.tick();
 }
 
-float MultitapDelay::applyEffect(float sample){
-    // read sample from delayline
-    float delayedSample = circBuffer.readTaps();
-    
-    // delay + feedback
+float MultitapDelay::applyEffect(int channel, float sample){
+    float taps = 0;
+    float output = 0;
+  
+    // read taps
+    for(int i = channel; i < tapAmount; i += 2){
+        taps++;
+        output += circBuffer.readTap(i);
+    }
+    output /= taps;
+   
+    // delay
     circBuffer.write(sample);
-    
-    // output
-    return delayedSample;
+    return output;
 }
