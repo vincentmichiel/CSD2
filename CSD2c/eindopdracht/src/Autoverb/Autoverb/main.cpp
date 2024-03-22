@@ -12,7 +12,8 @@ int main(int argc, const char * argv[]) {
     // init audio
     CustomCallback callback = CustomCallback {};
     JackModule jackModule = JackModule { callback };
-    std::cout << "multittaptest";
+    
+    
     jackModule.init(1, 2);
     
     bool running = true;

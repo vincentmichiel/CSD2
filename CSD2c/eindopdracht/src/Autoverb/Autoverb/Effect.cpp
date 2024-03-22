@@ -6,6 +6,7 @@
 //
 
 #include "Effect.hpp"
+#include <iostream>
 
 Effect::Effect(float mix) : mix(mix){
     bypass = false;
@@ -34,7 +35,6 @@ float Effect::process(float sample, int channel){
     if(bypass){
         return sample;
     }
-    
     float output;
 
     if(channel == - 1){

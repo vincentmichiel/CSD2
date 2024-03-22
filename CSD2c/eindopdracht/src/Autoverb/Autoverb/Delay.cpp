@@ -6,6 +6,7 @@
 //
 
 #include "Delay.hpp"
+#include <iostream>
 
 Delay::~Delay(){
     Effect::~Effect();
@@ -31,7 +32,7 @@ void Delay::tick(){
     circBuffer.tick();
 }
 
-float Delay::applyEffect(int channel, float sample){
+float Delay::applyEffect(float sample){
     // read sample from delayline
     float delayedSample = circBuffer.read();
     

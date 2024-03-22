@@ -9,6 +9,8 @@
 #define CustomCallback_h
 
 #include "jack_module.h"
+#include "Delay.hpp"
+#include <iostream>
 
 class CustomCallback : public AudioCallback {
 public:
@@ -29,6 +31,8 @@ public:
             for (int channel = 0u; channel < numOutputChannels; channel++) {
                 buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
             }
+            
+            delay->tick();
         }
         
     }
