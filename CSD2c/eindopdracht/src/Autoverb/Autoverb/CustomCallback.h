@@ -22,7 +22,6 @@ public:
     }
     
     ~CustomCallback(){
-        delete filter;
         AudioCallback::~AudioCallback();
     }
     
@@ -32,7 +31,7 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = filter->process(buffer.inputChannels[0][i]);
+                buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
             }
             // ticks
         }
@@ -41,7 +40,6 @@ public:
     
 private:
     float samplerate = 44100;
-    AllPassFilter * filter = new AllPassFilter(80, 0.5);
 };
 
 #endif /* CustomCallback_h */
