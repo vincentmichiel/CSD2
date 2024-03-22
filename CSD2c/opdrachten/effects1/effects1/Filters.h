@@ -6,6 +6,7 @@
 
 struct Filter {
     virtual double process(double input) = 0;
+    virtual ~Filter(){};
 };
 
 

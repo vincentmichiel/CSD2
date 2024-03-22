@@ -24,6 +24,7 @@ public:
         samplerate = (float) rate;
         tremolo->setSampleRate(rate);
         chorus = new StereoChorus;
+        chorus->setMix(0.5);
         
         filter->setBCoefficient(0.99);
         filter->setA1Coefficient(0.2);
@@ -54,6 +55,7 @@ public:
         delete delay;
         delete waveshaper;
         delete chorus;
+        delete filter;
     }
     
     // audio callback function
@@ -62,7 +64,7 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = filter->process(saw1.getSample());
+                buffer.outputChannels[channel][i] = chorus->process(buffer.inputChannels[0][i], channel);
             }
             
             saw1.tick();

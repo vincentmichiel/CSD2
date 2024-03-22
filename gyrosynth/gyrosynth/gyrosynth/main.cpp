@@ -1,7 +1,5 @@
 #include <iostream>
-#include <fstream>
 #include "CustomCallback.h"
-#include<thread>
 #include "osc.hpp"
 
 CustomCallback callback = CustomCallback {};
@@ -50,11 +48,6 @@ class localOSC : public OSC
 
 
 int main() {
-    // clear plot file
-    std::ofstream ofs;
-    ofs.open("waveform.txt", std::ofstream::out | std::ofstream::trunc);
-    ofs.close();
-    
     // init jack
     JackModule jackModule = JackModule { callback };
     jackModule.init (0, 1);

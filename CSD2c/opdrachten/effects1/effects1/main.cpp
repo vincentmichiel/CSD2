@@ -12,7 +12,7 @@
 #include "deltasequence.h"
 #include "Filters.h"
 
-#define BYPASS_AUDIO_LOOP 1
+#define BYPASS_AUDIO_LOOP 0
 
 int main(int argc, const char * argv[]) {
     // init audio
@@ -20,12 +20,6 @@ int main(int argc, const char * argv[]) {
     JackModule jackModule = JackModule { callback };
     
 #if BYPASS_AUDIO_LOOP
-//    HalfBiquad filter;
-//    filter.setBCoefficient(0.03);
-//    filter.setA1Coefficient(0.2);
-//    filter.setA2Coefficient(0.3);
-//    DeltaSequence::run(filter);
-    
     Biquad filter;
     filter.setCoefficients(0.029587210720909994,
                            0,

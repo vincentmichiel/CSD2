@@ -44,6 +44,7 @@ public:
     
     ~CustomCallback(){
         AudioCallback::~AudioCallback();
+        delete FMSynth;
     }
 
     // audio callback function

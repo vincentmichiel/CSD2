@@ -25,9 +25,9 @@ private:
     float applyEffect(int channel, float sample) override;
     
 public:
-    StereoChorus(float samplerate = 44100, float delay = 15, float maxDelay = 25) : Effect(), l_buffer(), r_buffer() {
+    StereoChorus(float samplerate = 44100, float delay = 20, float maxDelay = 40) : Effect(), l_buffer(), r_buffer() {
         delaySamples = (delay / 1000.0f) * samplerate;
-        offsetSamples = 0.007 * samplerate;
+        offsetSamples = 0.02 * samplerate;
         size = (maxDelay / 1000.0f) * samplerate;
         l_buffer.resetSize(size);
         l_buffer.setDistanceRW(delaySamples);
@@ -36,7 +36,7 @@ public:
         buffer[0] = &l_buffer;
         buffer[1] = &r_buffer;
         lfo[0] = new Sine(0.2, 1, samplerate);
-        lfo[1] = new Sine(0.21, 1, samplerate);
+        lfo[1] = new Sine(0.2, 1, samplerate);
         lfo[1]->setPhase(0.3);
         }
     ~StereoChorus();
