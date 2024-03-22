@@ -11,6 +11,7 @@
 #include "jack_module.h"
 #include "Delay.hpp"
 #include "MultitapDelay.hpp"
+#include "Moddelay.hpp"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -31,6 +32,7 @@ public:
             for (int channel = 0u; channel < numOutputChannels; channel++) {
                 buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
             }
+            // ticks
         }
         
     }

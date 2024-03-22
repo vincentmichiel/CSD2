@@ -6,7 +6,6 @@
 //
 
 #include "Delay.hpp"
-#include <iostream>
 
 Delay::~Delay(){
     Effect::~Effect();
