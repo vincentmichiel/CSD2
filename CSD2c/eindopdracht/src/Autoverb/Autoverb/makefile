@@ -6,8 +6,8 @@ CC = g++
 CFLAGS = -Wall -std=c++17
 LDFLAGS=-ljack
 PROG = main
-SRC = main.cpp Effect.cpp CircBuffer.cpp Oscillator.cpp Delay.cpp MultitapDelay.cpp Moddelay.cpp AllpassFilter.cpp AllpassBuffer.cpp interpolation.cpp
-OBJS = main.o Effect.o CircBuffer.o Oscillator.o Delay.o MultitapDelay.o Moddelay.o AllpassFilter.o AllpassBuffer.o interpolation.o
+SRC = main.cpp Effect.cpp CircBuffer.cpp Oscillator.cpp Delay.cpp MultitapDelay.cpp Moddelay.cpp AllpassFilter.cpp AllpassBuffer.cpp interpolation.cpp Reverb.cpp
+OBJS = main.o Effect.o CircBuffer.o Oscillator.o Delay.o MultitapDelay.o Moddelay.o AllpassFilter.o AllpassBuffer.o interpolation.o Reverb.o
 $(PROG): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
