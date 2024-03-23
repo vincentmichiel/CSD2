@@ -24,16 +24,20 @@ void MultitapDelay::tick(){
     circBuffer.tick();
 }
 
-float MultitapDelay::applyEffect(int channel, float sample){
+doubleOutput MultitapDelay::applyEffectDouble(float sample){
+    doubleOutput output;
     float taps = 0;
-    float output = 0;
+    float sum = 0;
   
-    // read taps
-    for(int i = channel; i < tapAmount; i += 2){
-        taps++;
-        output += circBuffer.readTap(i);
+    for(int channel = 0; channel < 2; channel++){
+        // read taps
+        for(int i = channel; i < tapAmount; i += 2){
+            taps++;
+            sum += circBuffer.readTap(i);
+        }
+        sum /= taps;
+        output.multiOut[channel] = sum;
     }
-    output /= taps;
    
     // delay
     circBuffer.write(sample);

@@ -28,7 +28,7 @@ float AllPassFilter::process(float input) {
 void AllPassFilter::setFeedback(float feedback) { feedbackAmount = feedback; };
 
 void AllPassFilter::setDelayTime(float milliseconds) {
-    numSamplesDelay = samplerate * (milliseconds / 1000);
+    numSamplesDelay = samplerate * (milliseconds / 1000.0);
     
     buffer->setSize(numSamplesDelay + 1);
     buffer->setDistanceReadHead(numSamplesDelay);

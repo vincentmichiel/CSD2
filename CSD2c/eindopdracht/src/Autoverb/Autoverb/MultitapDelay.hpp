@@ -13,11 +13,14 @@
 #include "Effect.hpp"
 #include "CircBuffer.hpp"
 
+struct doubleOutput {
+    float multiOut[2];
+};
+
 class MultitapDelay : public Effect {
 private:
     uint size, tapAmount;
     CircBuffer circBuffer;
-    float applyEffect(int channel, float sample) override;
     uint * distances;
     
 public:
@@ -32,6 +35,7 @@ public:
     ~MultitapDelay();
     uint getSize();
     uint* getDistances();
+    doubleOutput applyEffectDouble(float sample);
     void tick();
 };
 

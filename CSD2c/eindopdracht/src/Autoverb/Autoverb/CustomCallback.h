@@ -9,10 +9,7 @@
 #define CustomCallback_h
 
 #include "jack_module.h"
-#include "Delay.hpp"
-#include "MultitapDelay.hpp"
-#include "Moddelay.hpp"
-#include "AllpassFilter.hpp"
+#include "Reverb.hpp"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -22,6 +19,7 @@ public:
     }
     
     ~CustomCallback(){
+        delete reverb;
         AudioCallback::~AudioCallback();
     }
     
@@ -31,15 +29,17 @@ public:
         
         for (int i = 0u; i < numFrames; i++) {
             for (int channel = 0u; channel < numOutputChannels; channel++) {
-                buffer.outputChannels[channel][i] = buffer.inputChannels[0][i];
+                buffer.outputChannels[channel][i] = reverb->process(buffer.inputChannels[0][i], channel);
             }
             // ticks
+            reverb->tick();
         }
         
     }
     
 private:
     float samplerate = 44100;
+    Reverb * reverb = new Reverb(samplerate, 0.0);
 };
 
 #endif /* CustomCallback_h */
