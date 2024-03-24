@@ -33,6 +33,7 @@ public:
         circBuffer.setDistances(distances);
     }
     ~MultitapDelay();
+    float readTap(int tap);
     uint getSize();
     uint* getDistances();
     doubleOutput applyEffectDouble(float sample);

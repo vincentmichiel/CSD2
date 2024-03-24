@@ -24,6 +24,11 @@ void MultitapDelay::tick(){
     circBuffer.tick();
 }
 
+float MultitapDelay::readTap(int tap){
+    return circBuffer.readTap(tap);
+}
+
+
 doubleOutput MultitapDelay::applyEffectDouble(float sample){
     doubleOutput output;
     float taps = 0;
