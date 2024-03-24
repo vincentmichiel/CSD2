@@ -10,7 +10,6 @@
 
 #include "jack_module.h"
 #include "Reverb.hpp"
-#include "Filters.h"
 
 class CustomCallback : public AudioCallback {
 public:
