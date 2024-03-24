@@ -28,12 +28,11 @@ tripleOutput DelayLine::process(float input, float previousDelayInput){
     
     // sum input
     input = input + previousDelayInput;
-    input *= 0.5;
     // allpass filter
     input = allpassfilter->process(input);
     // delays
-    input = delay1->process(input) + input * 0.5;
-    input = delay2->process(input) + input * 0.5;
+    input = delay1->process(input) + input * 0.8;
+    input = delay2->process(input) + input * 0.8;
     
     // store output for next delayLine
     output.multiOut[0] = input * feedback / 8.0f;
@@ -51,6 +50,7 @@ Reverb::~Reverb(){
     for(int i = 0; i < 16; i++){
         delete delaylines[i];
     }
+    delete diffuser;
     delete earlyReflections;
     delete preDelay;
     delete modDelay1;
@@ -68,6 +68,7 @@ void Reverb::tick(){
     for(int i = 0; i < 16; i++){
         delaylines[i]->tick();
     }
+    diffuser->tick();
     earlyReflections->tick();
     preDelay->tick();
     modDelay1->tick();
@@ -79,14 +80,20 @@ float Reverb::process(float input, int channel){
         input = inputHPF->process(input);
         // pre
         preOutput = earlyReflections->applyEffectDouble(input);
-        
         input = preDelay->process(input);
+        
+        // diffuser
+        input = diffuser->applyEffectDouble(input).multiOut[0];
+        // split input
+        for(int j = 0; j < 16; j++){
+            inputSplit.multiOut[j] = diffuser->readTap(j);
+        }
         
         LSum = 0;
         RSum = 0;
         
         for(int i = 0; i < 16; i++){
-            output = delaylines[i]->process(input, output.multiOut[0]);
+            output = delaylines[i]->process(inputSplit.multiOut[i], output.multiOut[0]);
             LSum += output.multiOut[1];
             RSum += output.multiOut[2];
             
@@ -96,6 +103,7 @@ float Reverb::process(float input, int channel){
                 output.multiOut[0] = LPF[1]->process(modDelay2->process(output.multiOut[0]));
             }
         }
+        
         
         LSum += preOutput.multiOut[0];
         RSum += preOutput.multiOut[1];

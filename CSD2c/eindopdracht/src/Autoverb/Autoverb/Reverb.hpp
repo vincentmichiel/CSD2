@@ -20,6 +20,10 @@ struct tripleOutput {
     float multiOut[3];
 };
 
+struct ch16 {
+    float multiOut[16];
+};
+
 class DelayLine {
 private:
     float feedback;
@@ -32,8 +36,8 @@ public:
     DelayLine(){};
     DelayLine(float samplerate, float feedback, uint * delayTimes, float allpassDelay) : feedback(feedback) {
         // init delay
-        delay1 = new Delay(samplerate, delayTimes[0], delayTimes[0], -0.5);
-        delay2 = new Delay(samplerate, delayTimes[1], delayTimes[1], -0.5);
+        delay1 = new Delay(samplerate, delayTimes[0], delayTimes[0], -0.8);
+        delay2 = new Delay(samplerate, delayTimes[1], delayTimes[1], -0.8);
         
         // init multitap delay
         uint distances[2] = {delayTimes[2], delayTimes[3]};
@@ -76,6 +80,7 @@ private:
     
     float allpassDelays[16] = {30, 50, 45, 23, 80, 93, 46, 35, 40, 34, 88, 45, 21, 43, 28, 31};
     MultitapDelay * earlyReflections;
+    MultitapDelay * diffuser;
     Delay * preDelay;
     DelayLine * delaylines[16];
     Moddelay * modDelay1;
@@ -85,12 +90,23 @@ private:
     OnePole * LPF[2];
     tripleOutput output;
     doubleOutput preOutput;
+    ch16 inputSplit;
     float LSum = 0;
     float RSum = 0;
     
 public:
     Reverb(float samplerate, float feedback) {
         earlyReflections = new MultitapDelay(samplerate, 51, earlyReflectionTimes, 12);
+        
+        // diffusers
+        for(int i = 0; i < 2; i++){
+            uint multiInputDelays[16];
+            for(int i = 0; i < 16; i++){
+                multiInputDelays[i] = rand() % 79 + 1;
+            }
+            diffuser = new MultitapDelay(samplerate, 80, multiInputDelays, 16);
+        }
+        
         preDelay = new Delay(samplerate, 81, 80, 0.0);
         
         // moddelays
@@ -114,9 +130,9 @@ public:
         
         for(int i = 0; i < 2; i++){
             outputLPF[i] = new OnePole();
-            outputLPF[i]->setCoefficient(0.7);
+            outputLPF[i]->setCoefficient(0.4);
             LPF[i] = new OnePole();
-            LPF[i]->setCoefficient(0.65);
+            LPF[i]->setCoefficient(0.8);
         }
     }
     
