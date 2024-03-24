@@ -14,6 +14,7 @@
 #include "Moddelay.hpp"
 #include "MultitapDelay.hpp"
 #include "AllpassFilter.hpp"
+#include "Filters.h"
 
 struct tripleOutput {
     float multiOut[3];
@@ -53,27 +54,69 @@ public:
 
 class Reverb : public Effect {
 private:
-    uint delayTimes[8][4] = {
-        {1, 3, 4, 5},
-        {2, 4, 2, 3},
-        {3, 2, 4, 5},
-        {2, 3, 4, 5},
-        {5, 7, 4, 8},
-        {2, 5, 8, 5},
-        {1, 4, 7, 3},
-        {3, 6, 9, 8}
+    uint earlyReflectionTimes[12] = {8, 10, 14, 17, 22, 27, 29, 33, 40, 42, 47, 50};
+    uint delayTimes[16][4] = {
+        {55, 44, 20, 15},
+        {48, 30, 27, 23},
+        {65, 57, 28, 24},
+        {33, 45, 21, 15},
+        {79, 66, 74, 54},
+        {93, 73, 27, 40},
+        {31, 38, 54, 42},
+        {32, 24, 43, 38},
+        {33, 44, 20, 19},
+        {24, 33, 27, 28},
+        {50, 48, 30, 21},
+        {61, 58, 19, 16},
+        {32, 27, 35, 42},
+        {45, 50, 62, 67},
+        {31, 38, 41, 43},
+        {69, 61, 43, 41}
     };
     
-    float allpassDelays[8] = { 1, 3, 2, 4, 7, 6, 4, 9};
-    DelayLine * delaylines[8];
+    float allpassDelays[16] = {30, 50, 45, 23, 80, 93, 46, 35, 40, 34, 88, 45, 21, 43, 28, 31};
+    MultitapDelay * earlyReflections;
+    Delay * preDelay;
+    DelayLine * delaylines[16];
+    Moddelay * modDelay1;
+    Moddelay * modDelay2;
+    Biquad * inputHPF;
+    OnePole * outputLPF[2];
+    OnePole * LPF[2];
     tripleOutput output;
+    doubleOutput preOutput;
     float LSum = 0;
     float RSum = 0;
     
 public:
     Reverb(float samplerate, float feedback) {
-        for(int i = 0; i < 8; i++){
+        earlyReflections = new MultitapDelay(samplerate, 51, earlyReflectionTimes, 12);
+        preDelay = new Delay(samplerate, 81, 80, 0.0);
+        
+        // moddelays
+        modDelay1 = new Moddelay(samplerate, 200, 172, 199, 0.2);
+        modDelay2 = new Moddelay(samplerate, 250, 230, 249, 0.2);
+        modDelay2->setPhase(0.5);
+        
+        // delaylines
+        for(int i = 0; i < 16; i++){
             delaylines[i] = new DelayLine(samplerate, feedback, delayTimes[i], allpassDelays[i]);
+        }
+        output.multiOut[0] = 0;
+        
+        // filters
+        inputHPF = new Biquad();
+        inputHPF->setCoefficients(0.9899759179893742,
+                                  -1.9799518359787485,
+                                  0.9899759179893742,
+                                  -1.979851353142371,
+                                  0.9800523188151258);
+        
+        for(int i = 0; i < 2; i++){
+            outputLPF[i] = new OnePole();
+            outputLPF[i]->setCoefficient(0.7);
+            LPF[i] = new OnePole();
+            LPF[i]->setCoefficient(0.65);
         }
     }
     

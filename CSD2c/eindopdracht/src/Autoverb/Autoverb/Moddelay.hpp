@@ -29,6 +29,7 @@ public:
         }
     ~Moddelay();
     void setFeedback(float feedback);
+    void setPhase(float phase);
     uint getSize();
     float getFeedback();
     void tick();

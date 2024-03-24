@@ -10,6 +10,7 @@
 
 #include "jack_module.h"
 #include "Reverb.hpp"
+#include "Filters.h"
 
 class CustomCallback : public AudioCallback {
 public:
@@ -39,7 +40,7 @@ public:
     
 private:
     float samplerate = 44100;
-    Reverb * reverb = new Reverb(samplerate, 0.0);
+    Reverb * reverb = new Reverb(samplerate, 0.4);
 };
 
 #endif /* CustomCallback_h */

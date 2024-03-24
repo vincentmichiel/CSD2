@@ -15,6 +15,10 @@ void Moddelay::setFeedback(float feedback){
     this->feedback = feedback;
 }
 
+void Moddelay::setPhase(float phase){
+    LFO.setPhase(phase);
+}
+
 uint Moddelay::getSize(){
     return size;
 }
