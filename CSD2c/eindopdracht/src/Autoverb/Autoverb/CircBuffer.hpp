@@ -32,6 +32,7 @@ public:
     // write and read values at write / read head
     inline void write(float val) { m_buffer[m_writeH] = val; }
     inline float read() { return m_buffer[m_readH]; }
+    inline float readAtIndex(int index) {return m_buffer[index];}
     
     inline float readTap(uint tap) {
         return m_buffer[readHeads[tap]];

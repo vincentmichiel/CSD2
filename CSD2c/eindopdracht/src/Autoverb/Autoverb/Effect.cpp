@@ -49,6 +49,7 @@ float Effect::process(float sample, int channel){
     output *= mix;
     output += sample * 1 - mix;
     
+    
     // output
     return output;
 }

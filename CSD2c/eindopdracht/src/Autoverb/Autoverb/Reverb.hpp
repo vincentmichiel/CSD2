@@ -138,7 +138,7 @@ public:
     
     ~Reverb();
     
-    float process(float input, int channel);
+    float applyEffect(int channel, float sample) override;
     void tick();
 };
 

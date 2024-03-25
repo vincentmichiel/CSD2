@@ -75,7 +75,8 @@ void Reverb::tick(){
     modDelay2->tick();
 }
 
-float Reverb::process(float input, int channel){
+float Reverb::applyEffect(int channel, float sample){
+    float input = sample;
     if(channel == 0){
         input = inputHPF->process(input);
         // pre

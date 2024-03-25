@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 class Effect {
-private:
+protected:
     bool bypass;
     float mix;
     
