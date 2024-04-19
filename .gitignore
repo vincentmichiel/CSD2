@@ -24,3 +24,7 @@ build/
 
 # Backup files
 *~.nib
+
+# documentation files
+*.docx
+*.pptx
