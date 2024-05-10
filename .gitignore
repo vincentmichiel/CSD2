@@ -15,7 +15,8 @@ xcuserdata/
 # Generated files
 *.o
 *.pyc
-
+*.a
+*.vst3
 
 #Python modules
 MANIFEST
