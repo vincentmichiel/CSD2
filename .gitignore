@@ -18,6 +18,9 @@ xcuserdata/
 *.a
 *.vst3
 
+# JUCE
+.jucer
+
 #Python modules
 MANIFEST
 dist/
