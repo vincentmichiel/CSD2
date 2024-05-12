@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Oscillator.h"
+#include "PhaseRandomizer.h"
 
 //==============================================================================
 /**
@@ -57,6 +57,5 @@ public:
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessor)
-    void applyTremolo(float& input);
-    Sine * lfo;
+    PhaseRandomizer fft[2];
 };

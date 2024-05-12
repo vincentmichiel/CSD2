@@ -1,10 +1,10 @@
 /*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
+ ==============================================================================
+ 
+ This file contains the basic framework code for a JUCE plugin processor.
+ 
+ ==============================================================================
+ */
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
@@ -12,21 +12,20 @@
 //==============================================================================
 NewProjectAudioProcessor::NewProjectAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
+: AudioProcessor (BusesProperties()
+#if ! JucePlugin_IsMidiEffect
+#if ! JucePlugin_IsSynth
+                  .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+#endif
+                  .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+#endif
+                  )
 #endif
 {
 }
 
 NewProjectAudioProcessor::~NewProjectAudioProcessor()
 {
-    delete lfo;
 }
 
 //==============================================================================
@@ -37,29 +36,29 @@ const juce::String NewProjectAudioProcessor::getName() const
 
 bool NewProjectAudioProcessor::acceptsMidi() const
 {
-   #if JucePlugin_WantsMidiInput
+#if JucePlugin_WantsMidiInput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 bool NewProjectAudioProcessor::producesMidi() const
 {
-   #if JucePlugin_ProducesMidiOutput
+#if JucePlugin_ProducesMidiOutput
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 bool NewProjectAudioProcessor::isMidiEffect() const
 {
-   #if JucePlugin_IsMidiEffect
+#if JucePlugin_IsMidiEffect
     return true;
-   #else
+#else
     return false;
-   #endif
+#endif
 }
 
 double NewProjectAudioProcessor::getTailLengthSeconds() const
@@ -70,7 +69,7 @@ double NewProjectAudioProcessor::getTailLengthSeconds() const
 int NewProjectAudioProcessor::getNumPrograms()
 {
     return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    // so this should be at least 1, even if you're not really implementing programs.
 }
 
 int NewProjectAudioProcessor::getCurrentProgram()
@@ -94,7 +93,10 @@ void NewProjectAudioProcessor::changeProgramName (int index, const juce::String&
 //==============================================================================
 void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    lfo = new Sine(2, 1, sampleRate);
+    setLatencySamples(fft[0].getLatencyInSamples());
+    
+    fft[0].reset();
+    fft[1].reset();
 }
 
 void NewProjectAudioProcessor::releaseResources()
@@ -106,26 +108,7 @@ void NewProjectAudioProcessor::releaseResources()
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool NewProjectAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
-  #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
-
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
-
-    return true;
-  #endif
+    return layouts.getMainOutputChannelSet() == juce::AudioChannelSet::stereo();
 }
 #endif
 
@@ -134,31 +117,28 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+    auto numSamples = buffer.getNumSamples();
+    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
     
-    for(auto i = 0; i < buffer.getNumSamples(); i++){
-        for (int channel = 0; channel < totalNumInputChannels; ++channel)
-        {
-            auto& input = buffer.getWritePointer (channel)[i];
-            applyTremolo(input);
-        }
+    
+    //bool bypassed = apvts.getRawParameterValue("Bypass")->load();
+    bool bypassed = false;
+    
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    {
+        // select current channel
+        float* channelS = buffer.getWritePointer(channel);
         
-        //ticks
-        lfo->tick();
+        // loop through channel buffer
+        for (int sample = 0; sample < numSamples; ++sample) {
+            float input = channelS[sample];
+            input = fft[channel].processSample(input, bypassed);
+            channelS[sample] = input;
+        }
     }
-}
-
-void NewProjectAudioProcessor::applyTremolo(float& input){
-    input *= (lfo->getSample() + 1) * 0.5;
+    
 }
 
 //==============================================================================
