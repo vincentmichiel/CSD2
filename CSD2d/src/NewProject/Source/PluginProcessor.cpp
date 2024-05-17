@@ -122,10 +122,6 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    
-    //bool bypassed = apvts.getRawParameterValue("Bypass")->load();
-    bool bypassed = false;
-    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         // select current channel
@@ -134,7 +130,7 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         // loop through channel buffer
         for (int sample = 0; sample < numSamples; ++sample) {
             float input = channelS[sample];
-            input = fft[channel].processSample(input, bypassed);
+            input = fft[channel].processSample(input, false);
             channelS[sample] = input;
         }
     }
@@ -166,8 +162,6 @@ void NewProjectAudioProcessor::setStateInformation (const void* data, int sizeIn
     // whose contents will have been created by the getStateInformation() call.
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new NewProjectAudioProcessor();
