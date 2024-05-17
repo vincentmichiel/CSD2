@@ -17,5 +17,6 @@ public:
     ~ReEsser();
     
 private:
-    void processSpectrum(float* data, int numBins) override;
+    float threshHold = 0.01;
+    void processSpectrum(float* data) override;
 };
