@@ -28,6 +28,14 @@ void FFT::reset(){
     std::fill(outputFifo.begin(), outputFifo.end(), 0.0f);
 }
 
+void FFT::setSampleRate(double sampleRate){
+    this->sampleRate = sampleRate;
+}
+
+double FFT::getSampleRate(){
+    return sampleRate;
+}
+
 float FFT::processSample(float sample, bool bypassed) {
     inputFifo[pos] = sample;
     
@@ -66,7 +74,7 @@ void FFT::processFrame(bool bypassed) {
     // apply fft
     if (!bypassed) {
         fft.performRealOnlyForwardTransform(fftPtr, true);  // FFT
-        processSpectrum(fftPtr, numBins);
+        processSpectrum(fftPtr);
         fft.performRealOnlyInverseTransform(fftPtr);        // IFFT
     }
     
@@ -86,4 +94,12 @@ void FFT::processFrame(bool bypassed) {
     }
 }
 
-void FFT::processSpectrum(float* data, int numBins){};
+void FFT::processSpectrum(float* data){};
+
+float FFT::calcBinFromFrequency(float frequency){
+    return frequency / ((float) sampleRate / fftSize);
+}
+
+float FFT::calcFrequencyFromBin(int bin){
+    return (bin * sampleRate) / fftSize;
+};

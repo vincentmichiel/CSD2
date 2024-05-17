@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PhaseRandomizer.h"
+#include "ReEsser.h";
 
 //==============================================================================
 /**
@@ -58,4 +59,5 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessor)
     PhaseRandomizer fft[2];
+    ReEsser reEsser[2];
 };

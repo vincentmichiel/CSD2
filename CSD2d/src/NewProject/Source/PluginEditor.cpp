@@ -30,7 +30,7 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    g.drawFittedText ("Version 1.05", getLocalBounds(), juce::Justification::centred, 1);
+    g.drawFittedText ("Version 1.06 - ReEsser", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void NewProjectAudioProcessorEditor::resized()

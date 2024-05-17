@@ -13,7 +13,7 @@
 
 PhaseRandomizer::~PhaseRandomizer(){};
 
-void PhaseRandomizer::processSpectrum(float* data, int numBins)
+void PhaseRandomizer::processSpectrum(float* data)
 {
     auto* cdata = reinterpret_cast<std::complex<float>*>(data);
 

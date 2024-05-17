@@ -18,5 +18,5 @@ public:
     ~PhaseRandomizer();
     
 private:
-    void processSpectrum(float* data, int numBins) override;
+    void processSpectrum(float* data) override;
 };

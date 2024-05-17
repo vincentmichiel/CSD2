@@ -95,8 +95,15 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     setLatencySamples(fft[0].getLatencyInSamples());
     
+    fft[0].setSampleRate(sampleRate);
+    fft[1].setSampleRate(sampleRate);
+    reEsser[0].setSampleRate(sampleRate);
+    reEsser[1].setSampleRate(sampleRate);
+    
     fft[0].reset();
     fft[1].reset();
+    reEsser[0].reset();
+    reEsser[1].reset();
 }
 
 void NewProjectAudioProcessor::releaseResources()
@@ -130,7 +137,7 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         // loop through channel buffer
         for (int sample = 0; sample < numSamples; ++sample) {
             float input = channelS[sample];
-            input = fft[channel].processSample(input, false);
+            input = reEsser[channel].processSample(input, false);
             channelS[sample] = input;
         }
     }
