@@ -13,6 +13,18 @@
 
 ReEsser::~ReEsser(){};
 
+void ReEsser::setThreshHold(float threshHold){
+    this->threshHold = threshHold;
+}
+
+void ReEsser::setCenterFrequency(float frequency){
+    target = frequency;
+}
+
+void ReEsser::setBandWidth(float bandWidth){
+    this->bandWidth = bandWidth;
+}
+
 void ReEsser::processSpectrum(float* data)
 {
     auto* cdata = reinterpret_cast<std::complex<float>*>(data);
@@ -26,8 +38,9 @@ void ReEsser::processSpectrum(float* data)
    
     
     // spectral processing
-    float target = 6000;
-
+    // scale bandwidth
+    bandWidth = Interpolate::mapInRange(bandWidth, 0, 1, 8, 1);
+    
     for (int i = 0; i < numBins; ++i) {
         float magnitude = std::abs(cdata[i]);
         float phase = std::arg(cdata[i]);
@@ -39,9 +52,9 @@ void ReEsser::processSpectrum(float* data)
         
         
         // amplify frequencies when close to target and above threshold
-        if(distance < target / 5 && normalisedLevelValues[i] > threshHold){
+        if(distance < target / bandWidth && normalisedLevelValues[i] > threshHold){
             float amp = Interpolate::mapInRange(normalisedLevelValues[i], 0, 1, 10, 1);
-            magnitude *= Interpolate::mapInRange(distance, 1, target / 5, 5 * amp, 1);
+            magnitude *= 5 * amp;
         }
         
         
