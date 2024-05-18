@@ -131,6 +131,10 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
+        // set paramers
+        reEsser[channel].setThreshHold(threshHold);
+        reEsser[channel].setCenterFrequency(centerFrequency);
+        reEsser[channel].setBandWidth(bandWidth);
         // select current channel
         float* channelS = buffer.getWritePointer(channel);
         
@@ -158,15 +162,18 @@ juce::AudioProcessorEditor* NewProjectAudioProcessor::createEditor()
 //==============================================================================
 void NewProjectAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    // store data
+    juce::MemoryOutputStream (destData, true).writeFloat (threshHold);
+    juce::MemoryOutputStream (destData, true).writeFloat (centerFrequency);
+    juce::MemoryOutputStream (destData, true).writeFloat (bandWidth);
 }
 
 void NewProjectAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    // load data
+    threshHold = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    centerFrequency = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    bandWidth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
