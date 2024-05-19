@@ -47,7 +47,7 @@ void ReEsser::processSpectrum(float* data)
         float freq = calcFrequencyFromBin(i);
         
         normalisedLevelValues[i] = Interpolate::mapInRange(normalisedLevelValues[i], (float) levelsMinMax.getStart(), (float) levelsMinMax.getEnd(), 0, 1);
-        float distance = std::max(target, freq) - std::min(target, freq);
+        float distance = abs(target - freq);
         
         
         
