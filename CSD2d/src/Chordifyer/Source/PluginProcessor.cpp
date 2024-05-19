@@ -100,6 +100,9 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     chordifyer[0].reset();
     chordifyer[1].reset();
+    
+    chordifyer[0].prepare();
+    chordifyer[1].prepare();
 }
 
 void NewProjectAudioProcessor::releaseResources()
