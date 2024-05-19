@@ -11,19 +11,14 @@
 #pragma once
 
 #include "FFT.h"
-
-struct Note {
-    char root;
-    float frequency;
-};
+#include "SidechainAnalyser.h"
 
 class Chordifyer : public FFT {
 public:
     using FFT::FFT;
-    void prepare();
     ~Chordifyer();
+    SidechainAnalyser sidechainAnalyser;
     
 private:
-    Note notes[7];
     void processSpectrum(float* data) override;
 };
