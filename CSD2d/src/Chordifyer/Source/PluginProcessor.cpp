@@ -16,6 +16,7 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
                   .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+                  .withInput  ("Sidechain", juce::AudioChannelSet::stereo(), true)
 #endif
                   .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
 #endif
@@ -97,12 +98,13 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     
     chordifyer[0].setSampleRate(sampleRate);
     chordifyer[1].setSampleRate(sampleRate);
+    chordifyer[0].sidechainAnalyser.setSampleRate(sampleRate);
+    chordifyer[1].sidechainAnalyser.setSampleRate(sampleRate);
     
     chordifyer[0].reset();
     chordifyer[1].reset();
-    
-    chordifyer[0].prepare();
-    chordifyer[1].prepare();
+    chordifyer[0].sidechainAnalyser.reset();
+    chordifyer[1].sidechainAnalyser.reset();
 }
 
 void NewProjectAudioProcessor::releaseResources()
@@ -128,13 +130,21 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    auto mainBuffer = getBusBuffer(buffer, true, 0);
+    auto sidechainBuffer = getBusBuffer(buffer, true, 1);
+    
+    for (int channel = 0; channel < 2; ++channel)
     {
         // select current channel
-        float* channelS = buffer.getWritePointer(channel);
+        float* channelS = mainBuffer.getWritePointer(channel);
         
         // loop through channel buffer
         for (int sample = 0; sample < numSamples; ++sample) {
+            // analyse sidechain channel
+            if(totalNumInputChannels > 2){
+                sidechainBuffer.getWritePointer(channel)[sample] = chordifyer[channel].sidechainAnalyser.processSample(sidechainBuffer.getWritePointer(channel)[sample], false);
+            }
+            
             float input = channelS[sample];
             input = chordifyer[channel].processSample(input, false);
             channelS[sample] = input;
