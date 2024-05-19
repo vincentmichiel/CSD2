@@ -19,7 +19,9 @@ xcuserdata/
 *.vst3
 
 # JUCE
-.jucer
+*.jucer
+Builds/
+JuceLibraryCode/
 
 #Python modules
 MANIFEST
