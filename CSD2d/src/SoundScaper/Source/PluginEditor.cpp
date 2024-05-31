@@ -13,9 +13,44 @@
 NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (800, 500);
+    
+    lowShelfGain.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    lowShelfGain.setRange (-12.0f, 12.0f, 0.0f);
+    lowShelfGain.setNumDecimalPlacesToDisplay(1);
+    lowShelfGain.setTextValueSuffix("dB");
+    lowShelfGain.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    lowShelfGain.setPopupDisplayEnabled (true, false, this);
+    lowShelfGain.setTextValueSuffix (" Low Gain");
+    lowShelfGain.setValue(audioProcessor.lowShelfGain);
+    lowShelfGain.addListener(this);
+    addAndMakeVisible (&lowShelfGain);
+    
+    highShelfGain.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    highShelfGain.setRange (-12.0f, 12.0f, 0.0f);
+    highShelfGain.setNumDecimalPlacesToDisplay(1);
+    highShelfGain.setTextValueSuffix("dB");
+    highShelfGain.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    highShelfGain.setPopupDisplayEnabled (true, false, this);
+    highShelfGain.setTextValueSuffix (" High Gain");
+    highShelfGain.setValue(audioProcessor.highShelfGain);
+    highShelfGain.addListener(this);
+    addAndMakeVisible (&highShelfGain);
+    
+    
+    
+    
+    
+    resonatorFrequency.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    resonatorFrequency.setRange (20, 20000, 1.0f);
+    resonatorFrequency.setSkewFactor(0.2);
+    resonatorFrequency.setTextValueSuffix("Hz");
+    resonatorFrequency.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    resonatorFrequency.setPopupDisplayEnabled (true, false, this);
+    resonatorFrequency.setTextValueSuffix (" Resonator Frequency");
+    resonatorFrequency.setValue(audioProcessor.resonatorFrequency);
+    resonatorFrequency.addListener(this);
+    addAndMakeVisible (&resonatorFrequency);
 }
 
 NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
@@ -35,6 +70,11 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 
 void NewProjectAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    lowShelfGain.setBounds(30, 30, 80, 80);
+    highShelfGain.setBounds(120, 30, 80, 80);
+    resonatorFrequency.setBounds(30, 80, 80, 80);
+}
+
+void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
+    audioProcessor.resonatorFrequency = resonatorFrequency.getValue();
 }

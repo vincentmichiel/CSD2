@@ -52,6 +52,16 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    // ui variables
+    float lowShelfGain;
+    float highShelfGain;
+    float resonatorFrequency;
+    float resonatorDepth;
+    float reEsserThreshHold;
+    float reEsserMix;
+    float sidechainGain;
+    float sidechainMix;
 
 private:
     //==============================================================================

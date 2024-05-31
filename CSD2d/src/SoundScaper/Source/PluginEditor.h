@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class NewProjectAudioProcessorEditor  : public juce::AudioProcessorEditor
+class NewProjectAudioProcessorEditor  : public juce::AudioProcessorEditor, private juce::Slider::Listener
 {
 public:
     NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
@@ -25,9 +25,19 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     NewProjectAudioProcessor& audioProcessor;
+    
+    // ui objects
+    juce::Slider lowShelfGain;
+    juce::Slider highShelfGain;
+    juce::Slider resonatorFrequency;
+    juce::Slider resonatorDepth;
+    juce::Slider reEsserThreshHold;
+    juce::Slider reEsserMix;
+    juce::Slider sidechainGain;
+    juce::Slider sidechainMix;
+    
+    void sliderValueChanged(juce::Slider* slider) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };
