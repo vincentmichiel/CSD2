@@ -84,6 +84,8 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     setLatencySamples(reEsser[0].getLatencyInSamples());
     
     for(int channel = 0; channel < 2; channel++){
+        resonator[channel].setSampleRate(sampleRate);
+        resonator[channel].prepare(resonatorFrequency, 1.0, sampleRate);
         reEsser[channel].setSampleRate(sampleRate);
         reEsser[channel].reset();
     }
@@ -128,7 +130,10 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        // set paramers
+        // set parameters
+        resonator[channel].lfo->setFrequency(resonatorFrequency);
+        resonator[channel].setDepth(resonatorDepth);
+        
         reEsser[channel].setThreshHold(reEsserThreshHold);
         reEsser[channel].setCenterFrequency(6000);
         reEsser[channel].setBandWidth(0.98);
@@ -138,8 +143,29 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         
         // loop through channel buffer
         for (int sample = 0; sample < numSamples; ++sample) {
+            // resonator fft
+            if(resonatorDepth > 0){
+                resonator[channel].spectrumAnalyser.processSample(resonator[channel].lfo->getSample(), false);
+                resonator[channel].lfo->tick();
+            }
+            
             float input = channelS[sample];
-            input = reEsser[channel].processSample(input, false);
+            
+            // resonator
+            if(resonatorDepth > 0){
+                input = resonator[channel].processSample(input, false);
+            }
+            
+            // spectral glue
+            if(reEsserMix > 0 && reEsserThreshHold < 1)
+            {
+                float pre = input;
+                // processing -> wet signal gain correction -> gain correction
+                input = reEsser[channel].processSample(input, false) * (reEsserMix / 100) * (0.08 + reEsserThreshHold * 0.8);
+                // dry signal
+                input += (pre * (1.0f - (reEsserMix / 100)));
+            }
+            
             channelS[sample] = input;
         }
     }

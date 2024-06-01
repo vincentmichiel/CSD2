@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Resonator.h"
 #include "ReEsser.h"
 
 //==============================================================================
@@ -69,5 +70,6 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessor)
     
     // dsp modules
+    Resonator resonator[2];
     ReEsser reEsser[2];
 };
