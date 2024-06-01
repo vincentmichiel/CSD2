@@ -49,8 +49,6 @@ void ReEsser::processSpectrum(float* data)
         normalisedLevelValues[i] = Interpolate::mapInRange(normalisedLevelValues[i], (float) levelsMinMax.getStart(), (float) levelsMinMax.getEnd(), 0, 1);
         float distance = abs(target - freq);
         
-        
-        
         // amplify frequencies when close to target and above threshold
         if(distance < target / bandWidth && normalisedLevelValues[i] > threshHold){
             float amp = Interpolate::mapInRange(normalisedLevelValues[i], 0, 1, 10, 1);

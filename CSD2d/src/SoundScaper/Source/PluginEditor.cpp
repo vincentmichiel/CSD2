@@ -56,8 +56,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     addAndMakeVisible (&resonatorDepth);
     
     reEsserThreshHold.setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    reEsserThreshHold.setRange (0, 100, 1.0f);
-    reEsserThreshHold.setNumDecimalPlacesToDisplay(1);
+    reEsserThreshHold.setRange (0, 1, 0.01f);
     reEsserThreshHold.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
     reEsserThreshHold.setPopupDisplayEnabled (true, false, this);
     reEsserThreshHold.setTextValueSuffix (" Threshold");

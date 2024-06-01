@@ -59,7 +59,7 @@ public:
     float highShelfGain = 0;
     float resonatorFrequency = 440;
     float resonatorDepth = 0;
-    float reEsserThreshHold = 50;
+    float reEsserThreshHold = 1.0f;
     float reEsserMix = 0;
     float sidechainGain = 0;
     float sidechainMix = 0;
@@ -69,4 +69,5 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessor)
     
     // dsp modules
+    ReEsser reEsser[2];
 };
