@@ -46,8 +46,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     addAndMakeVisible (&resonatorFrequency);
     
     resonatorDepth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    resonatorDepth.setRange (0, 100, 1.0f);
-    resonatorDepth.setNumDecimalPlacesToDisplay(1);
+    resonatorDepth.setRange (0, 1, 0.01f);
     resonatorDepth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
     resonatorDepth.setPopupDisplayEnabled (true, false, this);
     resonatorDepth.setTextValueSuffix (" Depth");
