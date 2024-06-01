@@ -84,8 +84,19 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     setLatencySamples(reEsser[0].getLatencyInSamples());
     
     for(int channel = 0; channel < 2; channel++){
+        lowShelfFilter[channel].setSampleRate(sampleRate);
+        lowShelfFilter[channel].setAffectsLowEnd(true);
+        lowShelfFilter[channel].prepare();
+        lowShelfFilter[channel].reset();
+        
+        highShelfFilter[channel].setSampleRate(sampleRate);
+        highShelfFilter[channel].prepare();
+        highShelfFilter[channel].reset();
+        
         resonator[channel].setSampleRate(sampleRate);
         resonator[channel].prepare(resonatorFrequency, 1.0, sampleRate);
+        resonator[channel].reset();
+        
         reEsser[channel].setSampleRate(sampleRate);
         reEsser[channel].reset();
     }
@@ -131,6 +142,9 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         // set parameters
+        lowShelfFilter[channel].setDrive(lowShelfGain);
+        highShelfFilter[channel].setDrive(highShelfGain);
+        
         resonator[channel].lfo->setFrequency(resonatorFrequency);
         resonator[channel].setDepth(resonatorDepth);
         
@@ -150,6 +164,10 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             }
             
             float input = channelS[sample];
+            
+            // shelf filters
+            input = lowShelfFilter[channel].processSample(input, false);
+            input = highShelfFilter[channel].processSample(input, false);
             
             // resonator
             if(resonatorDepth > 0){
