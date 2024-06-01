@@ -166,8 +166,12 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             float input = channelS[sample];
             
             // shelf filters
-            input = lowShelfFilter[channel].processSample(input, false);
-            input = highShelfFilter[channel].processSample(input, false);
+            if(lowShelfGain != 0){
+                input = lowShelfFilter[channel].processSample(input, false);
+            }
+            if(highShelfGain != 0){
+                input = highShelfFilter[channel].processSample(input, false);
+            }
             
             // resonator
             if(resonatorDepth > 0){
