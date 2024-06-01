@@ -172,15 +172,26 @@ juce::AudioProcessorEditor* NewProjectAudioProcessor::createEditor()
 //==============================================================================
 void NewProjectAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    juce::MemoryOutputStream (destData, true).writeFloat (lowShelfGain);
+    juce::MemoryOutputStream (destData, true).writeFloat (highShelfGain);
+    juce::MemoryOutputStream (destData, true).writeFloat (resonatorFrequency);
+    juce::MemoryOutputStream (destData, true).writeFloat (resonatorDepth);
+    juce::MemoryOutputStream (destData, true).writeFloat (reEsserThreshHold);
+    juce::MemoryOutputStream (destData, true).writeFloat (reEsserMix);
+    juce::MemoryOutputStream (destData, true).writeFloat (sidechainGain);
+    juce::MemoryOutputStream (destData, true).writeFloat (sidechainMix);
 }
 
 void NewProjectAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    lowShelfGain = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    highShelfGain = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    resonatorFrequency = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    resonatorDepth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    reEsserThreshHold = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    reEsserMix = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    sidechainGain = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    sidechainMix = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
 }
 
 //==============================================================================
