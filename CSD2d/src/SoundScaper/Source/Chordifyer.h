@@ -18,7 +18,9 @@ public:
     using FFT::FFT;
     ~Chordifyer();
     SpectrumAnalyser sidechainAnalyser;
+    void setSidechainGain(float gain);
     
 private:
     void processSpectrum(float* data) override;
+    float sidechainGain;
 };
