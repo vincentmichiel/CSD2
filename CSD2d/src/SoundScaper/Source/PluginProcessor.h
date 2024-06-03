@@ -12,6 +12,7 @@
 #include "ShelfFilter.h"
 #include "Resonator.h"
 #include "ReEsser.h"
+#include "Chordifyer.h"
 
 //==============================================================================
 /**
@@ -75,4 +76,5 @@ private:
     ShelfFilter highShelfFilter[2];
     Resonator resonator[2];
     ReEsser reEsser[2];
+    Chordifyer chordifyer[2];
 };

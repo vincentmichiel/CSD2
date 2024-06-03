@@ -16,6 +16,7 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+                       .withInput  ("Sidechain", juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
@@ -94,11 +95,17 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         highShelfFilter[channel].reset();
         
         resonator[channel].setSampleRate(sampleRate);
+        resonator[channel].spectrumAnalyser.reset();
         resonator[channel].prepare(resonatorFrequency, 1.0, sampleRate);
         resonator[channel].reset();
         
         reEsser[channel].setSampleRate(sampleRate);
         reEsser[channel].reset();
+        
+        chordifyer[channel].setSampleRate(sampleRate);
+        chordifyer[channel].sidechainAnalyser.setSampleRate(sampleRate);
+        chordifyer[channel].reset();
+        chordifyer[channel].sidechainAnalyser.reset();
     }
 }
 
@@ -139,7 +146,10 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    auto mainBuffer = getBusBuffer(buffer, true, 0);
+    auto sidechainBuffer = getBusBuffer(buffer, true, 1);
+    
+    for (int channel = 0; channel < 2; ++channel)
     {
         // set parameters
         lowShelfFilter[channel].setDrive(lowShelfGain);
@@ -152,8 +162,10 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         reEsser[channel].setCenterFrequency(6000);
         reEsser[channel].setBandWidth(0.98);
         
+        chordifyer[channel].setSidechainGain(sidechainGain);
+        
         // select current channel
-        float* channelS = buffer.getWritePointer(channel);
+        float* channelS = mainBuffer.getWritePointer(channel);
         
         // loop through channel buffer
         for (int sample = 0; sample < numSamples; ++sample) {
@@ -183,9 +195,23 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             {
                 float pre = input;
                 // processing -> wet signal gain correction -> gain correction
-                input = reEsser[channel].processSample(input, false) * (reEsserMix / 100) * (0.08 + reEsserThreshHold * 0.8);
+                input = reEsser[channel].processSample(input, false) * (reEsserMix / 100.0f) * (0.08f + reEsserThreshHold * 0.8f);
                 // dry signal
-                input += (pre * (1.0f - (reEsserMix / 100)));
+                input += (pre * (1.0f - (reEsserMix / 100.0f)));
+            }
+            
+            // sidechain processing
+            // analyse sidechain channel
+            if(totalNumInputChannels > 2){
+                sidechainBuffer.getWritePointer(channel)[sample] = chordifyer[channel].sidechainAnalyser.processSample(sidechainBuffer.getWritePointer(channel)[sample], false);
+            }
+            
+            if(sidechainMix > 0){
+                float pre = input;
+                // processing -> wet signal gain correction -> gain correction
+                input = chordifyer[channel].processSample(input, false) * (sidechainMix / 100.0f);
+                // dry signal
+                input += (pre * (1.0f - (sidechainMix / 100.0f)));
             }
             
             channelS[sample] = input;
