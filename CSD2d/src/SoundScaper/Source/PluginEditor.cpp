@@ -74,7 +74,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     addAndMakeVisible (&reEsserMix);
     
     sidechainGain.setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    sidechainGain.setRange (-10, 10, 0.1f);
+    sidechainGain.setRange (-12, 12, 0.1f);
     sidechainGain.setNumDecimalPlacesToDisplay(1);
     sidechainGain.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
     sidechainGain.setPopupDisplayEnabled (true, false, this);
@@ -92,6 +92,27 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     sidechainMix.setValue(audioProcessor.sidechainMix);
     sidechainMix.addListener(this);
     addAndMakeVisible (&sidechainMix);
+    
+    
+    //========================================================
+    // lfo
+    resonatorFrequencyLFO.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    resonatorFrequencyLFO.setRange (0.01, 20, 0.01f);
+    resonatorFrequencyLFO.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    resonatorFrequencyLFO.setPopupDisplayEnabled (true, false, this);
+    resonatorFrequencyLFO.setTextValueSuffix (" Frequency");
+    resonatorFrequencyLFO.setValue(audioProcessor.resonatorFrequencyLFO);
+    resonatorFrequencyLFO.addListener(this);
+    addAndMakeVisible (&resonatorFrequencyLFO);
+    
+    resonatorFrequencyLFODepth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    resonatorFrequencyLFODepth.setRange (0.0, 1.0, 0.01f);
+    resonatorFrequencyLFODepth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    resonatorFrequencyLFODepth.setPopupDisplayEnabled (true, false, this);
+    resonatorFrequencyLFODepth.setTextValueSuffix (" Depth");
+    resonatorFrequencyLFODepth.setValue(audioProcessor.resonatorFrequencyLFODepth);
+    resonatorFrequencyLFODepth.addListener(this);
+    addAndMakeVisible (&resonatorFrequencyLFODepth);
 }
 
 NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
@@ -122,6 +143,10 @@ void NewProjectAudioProcessorEditor::resized()
     reEsserMix.setBounds(120, getHeight() - 100, 80, 80);
     sidechainGain.setBounds(300, getHeight() - 100, 80, 80);
     sidechainMix.setBounds(390, getHeight() - 100, 80, 80);
+    
+    // mod sources
+    resonatorFrequencyLFO.setBounds(320, 100, 45, 45);
+    resonatorFrequencyLFODepth.setBounds(362, 100, 45, 45);
 }
 
 void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
@@ -133,4 +158,8 @@ void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
     audioProcessor.reEsserMix = reEsserMix.getValue();
     audioProcessor.sidechainGain = sidechainGain.getValue();
     audioProcessor.sidechainMix = sidechainMix.getValue();
+    
+    // lfo
+    audioProcessor.resonatorFrequencyLFO = resonatorFrequencyLFO.getValue();
+    audioProcessor.resonatorFrequencyLFODepth = resonatorFrequencyLFODepth.getValue();
 }

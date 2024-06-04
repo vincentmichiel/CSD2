@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Oscillator.hpp";
 #include "ShelfFilter.h"
 #include "Resonator.h"
 #include "ReEsser.h"
@@ -66,6 +67,10 @@ public:
     float reEsserMix = 0;
     float sidechainGain = 0;
     float sidechainMix = 0;
+    
+    // modulation values
+    float resonatorFrequencyLFO = 2;
+    float resonatorFrequencyLFODepth = 0;
 
 private:
     //==============================================================================
@@ -77,4 +82,10 @@ private:
     Resonator resonator[2];
     ReEsser reEsser[2];
     Chordifyer chordifyer[2];
+    
+    // mod sources
+    Sine resonatorLFO[2];
+    
+    // tick
+    void tick(int channel);
 };

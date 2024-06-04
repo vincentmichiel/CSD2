@@ -37,6 +37,10 @@ private:
     juce::Slider sidechainGain;
     juce::Slider sidechainMix;
     
+    // modulation sources
+    juce::Slider resonatorFrequencyLFO;
+    juce::Slider resonatorFrequencyLFODepth;
+    
     void sliderValueChanged(juce::Slider* slider) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)

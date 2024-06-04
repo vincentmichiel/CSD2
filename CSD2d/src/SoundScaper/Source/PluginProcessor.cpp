@@ -84,6 +84,7 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     // init dsp modules
     setLatencySamples(reEsser[0].getLatencyInSamples());
     
+    
     for(int channel = 0; channel < 2; channel++){
         lowShelfFilter[channel].setSampleRate(sampleRate);
         lowShelfFilter[channel].setAffectsLowEnd(true);
@@ -106,12 +107,26 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         chordifyer[channel].sidechainAnalyser.setSampleRate(sampleRate);
         chordifyer[channel].reset();
         chordifyer[channel].sidechainAnalyser.reset();
+        
+        // mod sources
+        resonatorLFO[channel].setSamplerate(sampleRate);
+        resonatorLFO[channel].setFrequency(resonatorFrequencyLFO);
+        resonatorLFO[channel].setAmplitude(resonatorFrequencyLFODepth);
     }
 }
 
 void NewProjectAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any spare memory
+    for(int channel = 0; channel < 2; channel++){
+        lowShelfFilter[channel].reset();
+        highShelfFilter[channel].reset();
+        resonator[channel].reset();
+        resonator[channel].spectrumAnalyser.reset();
+        resonator[channel].lfo->setAmplitude(0);
+        reEsser[channel].reset();
+        chordifyer[channel].reset();
+        chordifyer[channel].sidechainAnalyser.reset();
+    }
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -152,17 +167,24 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     for (int channel = 0; channel < 2; ++channel)
     {
         // set parameters
+        // mod sources
+        resonatorLFO[channel].setFrequency(resonatorFrequencyLFO);
+        resonatorLFO[channel].setAmplitude(resonatorFrequencyLFODepth);
+        
+        // DSP modules
         lowShelfFilter[channel].setDrive(lowShelfGain);
         highShelfFilter[channel].setDrive(highShelfGain);
         
-        resonator[channel].lfo->setFrequency(resonatorFrequency);
+        resonator[channel].lfo->setFrequency(resonatorFrequency + (resonatorLFO[channel].getSample() * (resonatorFrequency/10)));
         resonator[channel].setDepth(resonatorDepth);
+        resonator[channel].lfo->setAmplitude(1);
         
         reEsser[channel].setThreshHold(reEsserThreshHold);
         reEsser[channel].setCenterFrequency(6000);
         reEsser[channel].setBandWidth(0.98);
         
         chordifyer[channel].setSidechainGain(sidechainGain);
+    
         
         // select current channel
         float* channelS = mainBuffer.getWritePointer(channel);
@@ -215,8 +237,13 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             }
             
             channelS[sample] = input;
+            tick(channel);
         }
     }
+}
+
+void NewProjectAudioProcessor::tick(int channel){
+    resonatorLFO[channel].tick();
 }
 
 //==============================================================================
