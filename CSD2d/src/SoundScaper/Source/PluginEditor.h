@@ -47,6 +47,9 @@ private:
     juce::Slider LFO3freq;
     juce::Slider LFO3phase;
     juce::Slider LFO3depth;
+    juce::Slider LFO4freq;
+    juce::Slider LFO4phase;
+    juce::Slider LFO4depth;
     
     void sliderValueChanged(juce::Slider* slider) override;
 
