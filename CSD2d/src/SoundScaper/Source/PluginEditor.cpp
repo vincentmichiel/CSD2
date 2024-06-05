@@ -95,24 +95,62 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     
     
     //========================================================
-    // lfo
-    resonatorFrequencyLFO.setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    resonatorFrequencyLFO.setRange (0.01, 20, 0.01f);
-    resonatorFrequencyLFO.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
-    resonatorFrequencyLFO.setPopupDisplayEnabled (true, false, this);
-    resonatorFrequencyLFO.setTextValueSuffix (" Frequency");
-    resonatorFrequencyLFO.setValue(audioProcessor.resonatorFrequencyLFO);
-    resonatorFrequencyLFO.addListener(this);
-    addAndMakeVisible (&resonatorFrequencyLFO);
+    // lfo 1
+    LFO1freq.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO1freq.setRange (0.01, 20, 0.01f);
+    LFO1freq.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO1freq.setPopupDisplayEnabled (true, false, this);
+    LFO1freq.setTextValueSuffix (" Frequency");
+    LFO1freq.setValue(audioProcessor.LFO1freq);
+    LFO1freq.addListener(this);
+    addAndMakeVisible (&LFO1freq);
     
-    resonatorFrequencyLFODepth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
-    resonatorFrequencyLFODepth.setRange (0.0, 1.0, 0.01f);
-    resonatorFrequencyLFODepth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
-    resonatorFrequencyLFODepth.setPopupDisplayEnabled (true, false, this);
-    resonatorFrequencyLFODepth.setTextValueSuffix (" Depth");
-    resonatorFrequencyLFODepth.setValue(audioProcessor.resonatorFrequencyLFODepth);
-    resonatorFrequencyLFODepth.addListener(this);
-    addAndMakeVisible (&resonatorFrequencyLFODepth);
+    LFO1depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO1depth.setRange (0.0, 1.0, 0.01f);
+    LFO1depth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO1depth.setPopupDisplayEnabled (true, false, this);
+    LFO1depth.setTextValueSuffix (" Depth");
+    LFO1depth.setValue(audioProcessor.LFO1depth);
+    LFO1depth.addListener(this);
+    addAndMakeVisible (&LFO1depth);
+    
+    // lfo 2
+    LFO2freq.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO2freq.setRange (0.01, 20, 0.01f);
+    LFO2freq.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO2freq.setPopupDisplayEnabled (true, false, this);
+    LFO2freq.setTextValueSuffix (" Frequency");
+    LFO2freq.setValue(audioProcessor.LFO2freq);
+    LFO2freq.addListener(this);
+    addAndMakeVisible (&LFO2freq);
+    
+    LFO2depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO2depth.setRange (0.0, 1.0, 0.01f);
+    LFO2depth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO2depth.setPopupDisplayEnabled (true, false, this);
+    LFO2depth.setTextValueSuffix (" Depth");
+    LFO2depth.setValue(audioProcessor.LFO2depth);
+    LFO2depth.addListener(this);
+    addAndMakeVisible (&LFO2depth);
+    
+    // lfo 3
+    LFO3freq.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO3freq.setRange (0.01, 20, 0.01f);
+    LFO3freq.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO3freq.setPopupDisplayEnabled (true, false, this);
+    LFO3freq.setTextValueSuffix (" Frequency");
+    LFO3freq.setValue(audioProcessor.LFO3freq);
+    LFO3freq.addListener(this);
+    addAndMakeVisible (&LFO3freq);
+    
+    LFO3depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO3depth.setRange (0.0, 1.0, 0.01f);
+    LFO3depth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO3depth.setPopupDisplayEnabled (true, false, this);
+    LFO3depth.setTextValueSuffix (" Depth");
+    LFO3depth.setValue(audioProcessor.LFO3depth);
+    LFO3depth.addListener(this);
+    addAndMakeVisible (&LFO3depth);
 }
 
 NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
@@ -145,8 +183,12 @@ void NewProjectAudioProcessorEditor::resized()
     sidechainMix.setBounds(390, getHeight() - 100, 80, 80);
     
     // mod sources
-    resonatorFrequencyLFO.setBounds(320, 100, 45, 45);
-    resonatorFrequencyLFODepth.setBounds(362, 100, 45, 45);
+    LFO1freq.setBounds(50, 100, 45, 45);
+    LFO1depth.setBounds(92, 100, 45, 45);
+    LFO2freq.setBounds(150, 100, 45, 45);
+    LFO2depth.setBounds(192, 100, 45, 45);
+    LFO3freq.setBounds(320, 100, 45, 45);
+    LFO3depth.setBounds(362, 100, 45, 45);
 }
 
 void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
@@ -160,6 +202,10 @@ void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
     audioProcessor.sidechainMix = sidechainMix.getValue();
     
     // lfo
-    audioProcessor.resonatorFrequencyLFO = resonatorFrequencyLFO.getValue();
-    audioProcessor.resonatorFrequencyLFODepth = resonatorFrequencyLFODepth.getValue();
+    audioProcessor.LFO1freq = LFO1freq.getValue();
+    audioProcessor.LFO1depth = LFO1depth.getValue();
+    audioProcessor.LFO2freq = LFO2freq.getValue();
+    audioProcessor.LFO2depth = LFO2depth.getValue();
+    audioProcessor.LFO3freq = LFO3freq.getValue();
+    audioProcessor.LFO3depth = LFO3depth.getValue();
 }

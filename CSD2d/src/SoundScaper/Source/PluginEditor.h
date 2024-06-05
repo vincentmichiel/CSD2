@@ -38,8 +38,12 @@ private:
     juce::Slider sidechainMix;
     
     // modulation sources
-    juce::Slider resonatorFrequencyLFO;
-    juce::Slider resonatorFrequencyLFODepth;
+    juce::Slider LFO1freq;
+    juce::Slider LFO1depth;
+    juce::Slider LFO2freq;
+    juce::Slider LFO2depth;
+    juce::Slider LFO3freq;
+    juce::Slider LFO3depth;
     
     void sliderValueChanged(juce::Slider* slider) override;
 
