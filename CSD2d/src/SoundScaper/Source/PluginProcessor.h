@@ -70,10 +70,13 @@ public:
     
     // modulation values
     float LFO1freq = 2;
+    float LFO1phase = 0;
     float LFO1depth = 0;
     float LFO2freq = 2;
+    float LFO2phase = 0;
     float LFO2depth = 0;
     float LFO3freq = 2;
+    float LFO3phase = 0;
     float LFO3depth = 0;
 
 private:

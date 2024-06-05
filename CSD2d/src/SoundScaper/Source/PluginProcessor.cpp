@@ -175,10 +175,13 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         // set parameters
         // mod sources
         LFO1[channel].setFrequency(LFO1freq);
+        if(LFO1phase != LFO1[channel].getPhaseOffset()) LFO1[channel].setPhase(LFO1phase);
         LFO1[channel].setAmplitude(LFO1depth);
         LFO2[channel].setFrequency(LFO2freq);
+        if(LFO2phase != LFO2[channel].getPhaseOffset()) LFO2[channel].setPhase(LFO2phase);
         LFO2[channel].setAmplitude(LFO2depth);
         LFO3[channel].setFrequency(LFO3freq);
+        if(LFO3phase != LFO3[channel].getPhaseOffset()) LFO3[channel].setPhase(LFO3phase);
         LFO3[channel].setAmplitude(LFO3depth);
         
         // DSP modules
