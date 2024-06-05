@@ -31,6 +31,7 @@ public:
     double getAmplitude();
     float getSample();
     float getPhase();
+    float getPhaseOffset();
     virtual std::string getOscillatorType();
     
 protected:
@@ -42,6 +43,7 @@ protected:
     float sample;
     
 private:
+    float phaseOffset;
     float samplerate;
     float sampleDuration;
 };

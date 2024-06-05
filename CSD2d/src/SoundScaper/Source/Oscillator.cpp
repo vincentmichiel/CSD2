@@ -33,7 +33,9 @@ void Oscillator::setAmplitude(float amplitude){
 }
 
 void Oscillator::setPhase(float phase){
+    phaseOffset = phase;
     this->phase = phase;
+    if(this->phase > 1.0f) this->phase -= 1.0f;
 }
 
 double Oscillator::getFrequency(){
@@ -52,12 +54,14 @@ float Oscillator::getPhase(){
     return phase;
 }
 
+float Oscillator::getPhaseOffset(){
+    return phaseOffset;
+}
+
 void Oscillator::tick(){
     // update phase
     phase += sampleDuration;
-    if(phase > 1.0f) {
-        phase -= 1.0f;
-    }
+    if(phase > 1.0f) phase -= 1.0f;
 }
 
 std::string Oscillator::getOscillatorType(){
