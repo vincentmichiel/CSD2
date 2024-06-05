@@ -69,8 +69,12 @@ public:
     float sidechainMix = 0;
     
     // modulation values
-    float resonatorFrequencyLFO = 2;
-    float resonatorFrequencyLFODepth = 0;
+    float LFO1freq = 2;
+    float LFO1depth = 0;
+    float LFO2freq = 2;
+    float LFO2depth = 0;
+    float LFO3freq = 2;
+    float LFO3depth = 0;
 
 private:
     //==============================================================================
@@ -84,7 +88,9 @@ private:
     Chordifyer chordifyer[2];
     
     // mod sources
-    Sine resonatorLFO[2];
+    Sine LFO1[2];
+    Sine LFO2[2];
+    Sine LFO3[2];
     
     // tick
     void tick(int channel);
