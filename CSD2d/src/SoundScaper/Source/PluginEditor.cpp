@@ -105,6 +105,15 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     LFO1freq.addListener(this);
     addAndMakeVisible (&LFO1freq);
     
+    LFO1phase.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO1phase.setRange (0.0, 1.0, 0.01f);
+    LFO1phase.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO1phase.setPopupDisplayEnabled (true, false, this);
+    LFO1phase.setTextValueSuffix (" Phase");
+    LFO1phase.setValue(audioProcessor.LFO1phase);
+    LFO1phase.addListener(this);
+    addAndMakeVisible (&LFO1phase);
+    
     LFO1depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
     LFO1depth.setRange (0.0, 1.0, 0.01f);
     LFO1depth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
@@ -124,6 +133,15 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     LFO2freq.addListener(this);
     addAndMakeVisible (&LFO2freq);
     
+    LFO2phase.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO2phase.setRange (0.0, 1.0, 0.01f);
+    LFO2phase.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO2phase.setPopupDisplayEnabled (true, false, this);
+    LFO2phase.setTextValueSuffix (" Phase");
+    LFO2phase.setValue(audioProcessor.LFO2phase);
+    LFO2phase.addListener(this);
+    addAndMakeVisible (&LFO2phase);
+    
     LFO2depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
     LFO2depth.setRange (0.0, 1.0, 0.01f);
     LFO2depth.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
@@ -142,6 +160,15 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     LFO3freq.setValue(audioProcessor.LFO3freq);
     LFO3freq.addListener(this);
     addAndMakeVisible (&LFO3freq);
+    
+    LFO3phase.setSliderStyle (juce::Slider::RotaryVerticalDrag);
+    LFO3phase.setRange (0.0, 1.0, 0.01f);
+    LFO3phase.setTextBoxStyle (juce::Slider::NoTextBox, false, 90, 0);
+    LFO3phase.setPopupDisplayEnabled (true, false, this);
+    LFO3phase.setTextValueSuffix (" Phase");
+    LFO3phase.setValue(audioProcessor.LFO3phase);
+    LFO3phase.addListener(this);
+    addAndMakeVisible (&LFO3phase);
     
     LFO3depth.setSliderStyle (juce::Slider::RotaryVerticalDrag);
     LFO3depth.setRange (0.0, 1.0, 0.01f);
@@ -183,12 +210,15 @@ void NewProjectAudioProcessorEditor::resized()
     sidechainMix.setBounds(390, getHeight() - 100, 80, 80);
     
     // mod sources
-    LFO1freq.setBounds(50, 100, 45, 45);
-    LFO1depth.setBounds(92, 100, 45, 45);
-    LFO2freq.setBounds(150, 100, 45, 45);
-    LFO2depth.setBounds(192, 100, 45, 45);
-    LFO3freq.setBounds(320, 100, 45, 45);
-    LFO3depth.setBounds(362, 100, 45, 45);
+    LFO1freq.setBounds(40, 100, 45, 45);
+    LFO1phase.setBounds(55, 120, 45, 45);
+    LFO1depth.setBounds(80, 100, 45, 45);
+    LFO2freq.setBounds(130, 100, 45, 45);
+    LFO2phase.setBounds(145, 120, 45, 45);
+    LFO2depth.setBounds(170, 100, 45, 45);
+    LFO3freq.setBounds(310, 100, 45, 45);
+    LFO3phase.setBounds(325, 120, 45, 45);
+    LFO3depth.setBounds(350, 100, 45, 45);
 }
 
 void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
@@ -203,9 +233,12 @@ void NewProjectAudioProcessorEditor::sliderValueChanged(juce::Slider* slider){
     
     // lfo
     audioProcessor.LFO1freq = LFO1freq.getValue();
+    audioProcessor.LFO1phase = LFO1phase.getValue();
     audioProcessor.LFO1depth = LFO1depth.getValue();
     audioProcessor.LFO2freq = LFO2freq.getValue();
+    audioProcessor.LFO2phase = LFO2phase.getValue();
     audioProcessor.LFO2depth = LFO2depth.getValue();
     audioProcessor.LFO3freq = LFO3freq.getValue();
+    audioProcessor.LFO3phase = LFO3phase.getValue();
     audioProcessor.LFO3depth = LFO3depth.getValue();
 }
