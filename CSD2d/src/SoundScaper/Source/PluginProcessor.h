@@ -78,6 +78,9 @@ public:
     float LFO3freq = 2;
     float LFO3phase = 0;
     float LFO3depth = 0;
+    float LFO4freq = 2;
+    float LFO4phase = 0;
+    float LFO4depth = 0;
 
 private:
     //==============================================================================
@@ -94,6 +97,7 @@ private:
     Sine LFO1[2];
     Sine LFO2[2];
     Sine LFO3[2];
+    Sine LFO4[2];
     
     // tick
     void tick(int channel);

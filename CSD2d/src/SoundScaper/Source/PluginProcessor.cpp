@@ -118,6 +118,9 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         LFO3[channel].setSamplerate(sampleRate);
         LFO3[channel].setFrequency(LFO3freq);
         LFO3[channel].setAmplitude(LFO3depth);
+        LFO4[channel].setSamplerate(sampleRate);
+        LFO4[channel].setFrequency(LFO4freq);
+        LFO4[channel].setAmplitude(LFO4depth);
     }
 }
 
@@ -128,7 +131,6 @@ void NewProjectAudioProcessor::releaseResources()
         highShelfFilter[channel].reset();
         resonator[channel].reset();
         resonator[channel].spectrumAnalyser.reset();
-        resonator[channel].lfo->setAmplitude(0);
         reEsser[channel].reset();
         chordifyer[channel].reset();
         chordifyer[channel].sidechainAnalyser.reset();
@@ -183,14 +185,19 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         LFO3[channel].setFrequency(LFO3freq);
         if(LFO3phase != LFO3[channel].getPhaseOffset()) LFO3[channel].setPhase(LFO3phase);
         LFO3[channel].setAmplitude(LFO3depth);
+        LFO4[channel].setFrequency(LFO4freq);
+        if(LFO4phase != LFO4[channel].getPhaseOffset()) LFO4[channel].setPhase(LFO4phase);
+        LFO4[channel].setAmplitude(LFO4depth);
         
         // DSP modules
         lowShelfFilter[channel].setDrive(lowShelfGain + (LFO1[channel].getSample() * (12)));
         highShelfFilter[channel].setDrive(highShelfGain + (LFO2[channel].getSample() * (12)));
         
         resonator[channel].lfo->setFrequency(resonatorFrequency + (LFO3[channel].getSample() * (resonatorFrequency/10)));
-        resonator[channel].setDepth(resonatorDepth);
-        resonator[channel].lfo->setAmplitude(1);
+        float resDepth = resonatorDepth + LFO4[channel].getSample();
+        if(resDepth > 1) resDepth = 1;
+        if(resDepth < 0) resDepth = 0;
+        resonator[channel].setDepth(resDepth);
         
         reEsser[channel].setThreshHold(reEsserThreshHold);
         reEsser[channel].setCenterFrequency(6000);
@@ -259,6 +266,7 @@ void NewProjectAudioProcessor::tick(int channel){
     LFO1[channel].tick();
     LFO2[channel].tick();
     LFO3[channel].tick();
+    LFO4[channel].tick();
 }
 
 //==============================================================================
