@@ -121,6 +121,19 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         LFO4[channel].setSamplerate(sampleRate);
         LFO4[channel].setFrequency(LFO4freq);
         LFO4[channel].setAmplitude(LFO4depth);
+        
+        LFO5[channel].setSamplerate(sampleRate);
+        LFO5[channel].setFrequency(LFO5freq);
+        LFO5[channel].setAmplitude(LFO5depth);
+        LFO6[channel].setSamplerate(sampleRate);
+        LFO6[channel].setFrequency(LFO6freq);
+        LFO6[channel].setAmplitude(LFO6depth);
+        LFO7[channel].setSamplerate(sampleRate);
+        LFO7[channel].setFrequency(LFO7freq);
+        LFO7[channel].setAmplitude(LFO7depth);
+        LFO8[channel].setSamplerate(sampleRate);
+        LFO8[channel].setFrequency(LFO8freq);
+        LFO8[channel].setAmplitude(LFO8depth);
     }
 }
 
@@ -188,6 +201,19 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         LFO4[channel].setFrequency(LFO4freq);
         if(LFO4phase != LFO4[channel].getPhaseOffset()) LFO4[channel].setPhase(LFO4phase);
         LFO4[channel].setAmplitude(LFO4depth);
+        
+        LFO5[channel].setFrequency(LFO5freq);
+        if(LFO5phase != LFO5[channel].getPhaseOffset()) LFO5[channel].setPhase(LFO5phase);
+        LFO5[channel].setAmplitude(LFO5depth);
+        LFO6[channel].setFrequency(LFO6freq);
+        if(LFO6phase != LFO6[channel].getPhaseOffset()) LFO6[channel].setPhase(LFO6phase);
+        LFO6[channel].setAmplitude(LFO6depth);
+        LFO7[channel].setFrequency(LFO7freq);
+        if(LFO7phase != LFO7[channel].getPhaseOffset()) LFO7[channel].setPhase(LFO7phase);
+        LFO7[channel].setAmplitude(LFO7depth);
+        LFO8[channel].setFrequency(LFO8freq);
+        if(LFO8phase != LFO8[channel].getPhaseOffset()) LFO8[channel].setPhase(LFO8phase);
+        LFO8[channel].setAmplitude(LFO8depth);
         
         // DSP modules
         lowShelfFilter[channel].setDrive(lowShelfGain + (LFO1[channel].getSample() * (12)));
@@ -267,6 +293,11 @@ void NewProjectAudioProcessor::tick(int channel){
     LFO2[channel].tick();
     LFO3[channel].tick();
     LFO4[channel].tick();
+    
+    LFO5[channel].tick();
+    LFO6[channel].tick();
+    LFO7[channel].tick();
+    LFO8[channel].tick();
 }
 
 //==============================================================================
@@ -291,6 +322,32 @@ void NewProjectAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     juce::MemoryOutputStream (destData, true).writeFloat (reEsserMix);
     juce::MemoryOutputStream (destData, true).writeFloat (sidechainGain);
     juce::MemoryOutputStream (destData, true).writeFloat (sidechainMix);
+    
+    // mod sources
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO1freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO1phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO1depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO2freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO2phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO2depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO3freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO3phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO3depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO4freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO4phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO4depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO5freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO5phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO5depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO6freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO6phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO6depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO7freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO7phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO7depth);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO8freq);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO8phase);
+    juce::MemoryOutputStream (destData, true).writeFloat (LFO8depth);
 }
 
 void NewProjectAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -303,6 +360,32 @@ void NewProjectAudioProcessor::setStateInformation (const void* data, int sizeIn
     reEsserMix = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
     sidechainGain = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
     sidechainMix = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    
+    // mod sources
+    LFO1freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO1phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO1depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO2freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO2phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO2depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO3freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO3phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO3depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO4freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO4phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO4depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO5freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO5phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO5depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO6freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO6phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO6depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO7freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO7phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO7depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO8freq = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO8phase = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
+    LFO8depth = juce::MemoryInputStream (data, static_cast<size_t> (sizeInBytes), false).readFloat();
 }
 
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

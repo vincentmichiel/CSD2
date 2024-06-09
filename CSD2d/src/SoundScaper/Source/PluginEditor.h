@@ -51,6 +51,19 @@ private:
     juce::Slider LFO4phase;
     juce::Slider LFO4depth;
     
+    juce::Slider LFO5freq;
+    juce::Slider LFO5phase;
+    juce::Slider LFO5depth;
+    juce::Slider LFO6freq;
+    juce::Slider LFO6phase;
+    juce::Slider LFO6depth;
+    juce::Slider LFO7freq;
+    juce::Slider LFO7phase;
+    juce::Slider LFO7depth;
+    juce::Slider LFO8freq;
+    juce::Slider LFO8phase;
+    juce::Slider LFO8depth;
+    
     void sliderValueChanged(juce::Slider* slider) override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)

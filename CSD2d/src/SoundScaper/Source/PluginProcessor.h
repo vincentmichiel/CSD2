@@ -81,6 +81,19 @@ public:
     float LFO4freq = 2;
     float LFO4phase = 0;
     float LFO4depth = 0;
+    
+    float LFO5freq = 2;
+    float LFO5phase = 0;
+    float LFO5depth = 0;
+    float LFO6freq = 2;
+    float LFO6phase = 0;
+    float LFO6depth = 0;
+    float LFO7freq = 2;
+    float LFO7phase = 0;
+    float LFO7depth = 0;
+    float LFO8freq = 2;
+    float LFO8phase = 0;
+    float LFO8depth = 0;
 
 private:
     //==============================================================================
@@ -98,6 +111,11 @@ private:
     Sine LFO2[2];
     Sine LFO3[2];
     Sine LFO4[2];
+    
+    Sine LFO5[2];
+    Sine LFO6[2];
+    Sine LFO7[2];
+    Sine LFO8[2];
     
     // tick
     void tick(int channel);
