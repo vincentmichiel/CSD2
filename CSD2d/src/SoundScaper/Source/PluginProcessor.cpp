@@ -225,11 +225,14 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
         if(resDepth < 0) resDepth = 0;
         resonator[channel].setDepth(resDepth);
         
-        reEsser[channel].setThreshHold(reEsserThreshHold);
+        float moddedThreshHold = reEsserThreshHold + LFO5[channel].getSample();
+        if(moddedThreshHold > 1) moddedThreshHold = 1;
+        if(moddedThreshHold < 0) moddedThreshHold = 0;
+        reEsser[channel].setThreshHold(moddedThreshHold);
         reEsser[channel].setCenterFrequency(6000);
         reEsser[channel].setBandWidth(0.98);
         
-        chordifyer[channel].setSidechainGain(sidechainGain);
+        chordifyer[channel].setSidechainGain(sidechainGain + (LFO7[channel].getSample() * (12)));
     
         
         // select current channel
@@ -263,9 +266,15 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             {
                 float pre = input;
                 // processing -> wet signal gain correction -> gain correction
-                input = reEsser[channel].processSample(input, false) * (reEsserMix / 100.0f) * (0.08f + reEsserThreshHold * 0.8f);
+                float moddedReEsserMix = (reEsserMix / 100.0f) + LFO6[channel].getSample();
+                if(moddedReEsserMix > 1) {
+                    moddedReEsserMix = 1;
+                } else if(moddedReEsserMix < 0){
+                    moddedReEsserMix = 0;
+                }
+                input = reEsser[channel].processSample(input, false) * moddedReEsserMix * (0.08f + reEsserThreshHold * 0.8f);
                 // dry signal
-                input += (pre * (1.0f - (reEsserMix / 100.0f)));
+                input += (pre * (1.0f - moddedReEsserMix));
             }
             
             // sidechain processing
@@ -277,9 +286,15 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
             if(sidechainMix > 0){
                 float pre = input;
                 // processing -> wet signal gain correction -> gain correction
-                input = chordifyer[channel].processSample(input, false) * (sidechainMix / 100.0f);
+                float moddedSidechainMix = (sidechainMix / 100.0f) + LFO8[channel].getSample();
+                if(moddedSidechainMix > 1) {
+                    moddedSidechainMix = 1;
+                } else if(moddedSidechainMix < 0){
+                    moddedSidechainMix = 0;
+                }
+                input = chordifyer[channel].processSample(input, false) * moddedSidechainMix;
                 // dry signal
-                input += (pre * (1.0f - (sidechainMix / 100.0f)));
+                input += (pre * (1.0f - moddedSidechainMix));
             }
             
             channelS[sample] = input;
