@@ -6,8 +6,8 @@ CC = g++
 CFLAGS = -Wall -std=c++17
 LDFLAGS=
 PROG = main
-SRC = main.cpp Fir.cpp
-OBJS = main.o Fir.o
+SRC = main.cpp Fir.cpp DFI.cpp DFII.cpp
+OBJS = main.o Fir.o DFI.o DFII.o
 
 $(PROG): $(OBJS)
 	$(CC) -o $@ $(OBJS) $(LDFLAGS)
