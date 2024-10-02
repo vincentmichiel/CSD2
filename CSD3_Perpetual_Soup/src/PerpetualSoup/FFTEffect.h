@@ -1,29 +1,41 @@
 #include <Bela.h>
 #include <libraries/Fft/Fft.h>
-#include <libraries/Scope/Scope.h>
 #include <cmath>
 #include <cstring>
 #include <vector>
 #include <algorithm>
 
-class FFTWrapper {
-	private:
-	Fft gFft;							// FFT processing object
-	float gScaleFactor = 0.5;			// How much to scale the output, based on window type and overlap
-	void process_fft(std::vector<float> const& inBuffer, unsigned int inPointer, std::vector<float>& outBuffer, unsigned int outPointer);
-	int gCachedInputBufferPointer = 0;
+class FFTEffect {
+	public:
+	FFTEffect();
+	virtual ~FFTEffect();
+	
+	// multithreading variables
+	static void process_fft_background_static(void *arg);
+	float process(float in);
 	
 	protected:
 	// FFT-related variables
+	Fft gFft;							// FFT processing object
 	const int gFftSize = 1024;			// FFT window size in samples
-	const int gHopSize = 128;			// How often we calculate a window
+	virtual void processSpectrum();
 	
+	private:
+	// FFT-related variables
+	const int gHopSize = 128;			// How often we calculate a window
+	float gScaleFactor = 0.5;			// How much to scale the output, based on window type and overlap
+	
+	// multithreading variables
+	void process_fft_background();
+	AuxiliaryTask gFftTask;
+	int gCachedInputBufferPointer = 0;
+
 	// Circular buffer and pointer for assembling a window of samples
 	const int gBufferSize = 16384;
 	std::vector<float> gInputBuffer;
 	int gInputBufferPointer = 0;
 	int gHopCounter = 0;
-	
+
 	// Circular buffer for collecting the output of the overlap-add process
 	std::vector<float> gOutputBuffer;
 
@@ -35,7 +47,5 @@ class FFTWrapper {
 	std::vector<float> gAnalysisWindowBuffer;
 	std::vector<float> gSynthesisWindowBuffer;
 	
-	public:
-	FFTWrapper();
-	float process(float sample);
+	void process_fft(std::vector<float> const& inBuffer, unsigned int inPointer, std::vector<float>& outBuffer, unsigned int outPointer);
 };
