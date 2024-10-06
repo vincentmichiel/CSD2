@@ -11,7 +11,7 @@ void FFTEffectExample::processSpectrum(){
 		float phase = atan2f(gFft.fdi(n), gFft.fdr(n));
 		
 			// lowpass example
-			if(n > 20){
+			if(n < 10){
 				amplitude = 0;
 			}
 			
